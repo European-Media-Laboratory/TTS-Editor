@@ -16,7 +16,6 @@ installed on your machine in order to run the TTS Editor.
 - ffmpeg - xuggle version (i.e. http://build.xuggle.com/job/xuggler_jdk5_stable/100/artifact/workingcopy/dist/bin/xuggle-ffmpeg.4.0.1023-i686-pc-linux-gnu.sh)
 - lame
 - sox
-- Red5
 - Apache Geronimo (only tested with >= 2.1, we recommend using Geronimo-Tomcat)
 - Java/JRE
 - maven (for building the WAR only)
