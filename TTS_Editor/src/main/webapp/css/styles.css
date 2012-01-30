@@ -1,0 +1,93 @@
+select
+{
+border:1px solid #000;
+color:#000;
+background-color:#BDC4BD;
+letter-spacing:0px
+}
+
+#navoben ul {
+	padding: 0px;
+	margin: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: White;
+}
+
+#navoben ul li {
+	display: inline;
+	font-size: 0.8em;
+	color: #FFFFFF;
+	padding: 0px;
+	margin: 0px;
+}
+
+#navoben ul li a {
+	padding: 0px 10px;
+	margin: 0px;
+	text-decoration: none;
+	float: left;
+	color: #fff;
+	border: 1px solid #8a897d;
+}
+
+#navoben ul li a:hover {
+	color: #000;
+	background-color: #edede9;
+	margin: 0px;
+	padding: 0px 10px;
+	border: 1px solid #edede9;
+}
+
+#test123 {
+	display: inline;
+	font-size: 0.8em;
+	color: #FFFFFF;
+	padding: 0px;
+	margin: 0px;
+}
+
+#test123 a {
+	padding: 0px 10px;
+	margin: 0px;
+	text-decoration: none;
+	float: left;
+	color: #fff;
+	border: 1px solid #8a897d;
+}
+
+#test123 a:hover {
+	color: #000;
+	background-color: #edede9;
+	margin: 0px;
+	padding: 0px 10px;
+	border: 1px solid #edede9;
+}
+
+
+.text
+{
+font-size: 14px;
+color: #999999;
+line-height: 21px;
+font-family: Courier New,Courier,Monaco,monospace;
+}
+.lesen
+{
+font-size: 11px;
+color: #666666;
+line-height: 18px;
+font-family: Verdana,Arial,Helvetica;
+}
+.h1
+{
+font-size: 18px;
+margin-top: 3mm;
+margin-bottom: 3mm;
+font-family: Verdana,Arial,Helvetica;
+}
+table 
+{ 
+font-family: Verdana,Arial,Helvetica; font-size:0.9em; font-weight:normal; 
+}
+input:focus { border: 1px solid #FFF8DC; background-color: #FAEBD7; }
+input:active { border: 1px solid #FFF8DC; background-color: #FAEBD7; }

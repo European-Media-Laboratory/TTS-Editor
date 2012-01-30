@@ -1,0 +1,74 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup 
+		autoCentre="true" 
+		visible="#{subtitlingManager.showSplittingPopup}" 
+		modal="true" 
+		rendered="#{subtitlingManager.showSplittingPopup}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 200px;"
+		>		   
+		<f:facet name="header">
+        	<ice:panelGrid 
+        		width="100%" 
+        		cellpadding="0" 
+        		cellspacing="0" 
+        		columns="2" 
+        		style="text-align: center;"
+        		>
+            	<ice:outputText 
+            		style="color: #FFFFFF;" 
+            		value="#{userSettings.settings['pauseInsertion.split']}"
+            		/>
+                	<ice:commandButton 
+                		image="../img/cancel-small.png" 
+                		actionListener="#{subtitlingManager.closePopupAction}" 
+                		alt="close" 
+                		title="#{userSettings.settings['popup.close']}"
+                		/>
+            </ice:panelGrid>
+        </f:facet>
+	    <f:facet name="body">
+           	<ice:panelGrid 
+           		width="100%" 
+           		cellpadding="0" 
+           		cellspacing="0" 
+           		columns="2" 
+           		style="text-align: center;"
+           		>
+			<ice:outputText value="#{subtitlingManager.splittingInfo}"/>
+			<ice:outputText value=""/>
+			<ice:outputText value="#{userSettings.settings['pauseInsertion.evenSplit']}"/>
+			<ice:inputText 
+				id="evenSplitting"
+				value="#{subtitlingManager.evenSplitting}"
+				valueChangeListener="#{subtitlingManager.splittingFactorChange}"
+				partialSubmit="true"
+				/>	
+			<ice:outputText value="#{userSettings.settings['pauseInsertion.secondSplit']}"/>
+			<ice:inputText 
+				id="splitSeconds"
+				value="#{subtitlingManager.splitSeconds}"
+				valueChangeListener="#{subtitlingManager.splittingFactorChange}"
+				partialSubmit="true"
+				/>	
+			<ice:commandButton 
+				id="cancel2" 
+				actionListener="#{subtitlingManager.closePopupAction}" 
+				value="#{userSettings.settings['pauseInsertion.apply1Instance']}"
+				>
+			</ice:commandButton>
+<!--			<ice:commandButton -->
+<!--				id="cancelAll" -->
+<!--				actionListener="#{subtitlingManager.closePopupAction}" -->
+<!--				value="OK - apply to all Pauses" -->
+<!--				>-->
+<!--			</ice:commandButton>-->
+			
+			</ice:panelGrid>
+		</f:facet>
+	</ice:panelPopup>
+</div>

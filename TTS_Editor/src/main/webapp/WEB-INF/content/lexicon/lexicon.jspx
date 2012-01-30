@@ -1,0 +1,180 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+		<ice:menuBar orientation="horizontal">
+			<ice:menuItem 
+				value="#{userSettings.settings['mainMenu.LexiconHeader']}"
+				id="lexicon"
+				>
+				<ice:menuItem
+					value="#{userSettings.settings['lexicon.Save']}"
+					id="saveLex"
+					actionListener="#{popupManager.openFileNameDialog}"
+					>
+				</ice:menuItem>	
+				<ice:menuItem
+					value="#{userSettings.settings['lexicon.AddWordList']}"
+					id="addWordList"
+					actionListener="#{popupManager.openFileOpenDialog}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['lexicon.AddLexicon']}"
+					id="addLexicon"
+					actionListener="#{popupManager.openFileOpenDialog}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['mainMenu.OpenLexicon']}"
+					id="openLex"
+					actionListener="#{popupManager.openFileOpenDialog}"
+					>
+				</ice:menuItem>			
+			</ice:menuItem>
+			
+			<ice:menuItem
+				value="#{userSettings.settings['lexicon.Phonetise']}"
+				id="phonetise"
+				>
+				<ice:menuItem
+					value="#{userSettings.settings['lexicon.PhonetiseList']}"
+					id="phonetiseList"
+					actionListener="#{tuningManager.phoneticTuning}"
+					>				
+<!--					actionListener="#{tuningManager.phoneticTuning}"-->
+				</ice:menuItem>		
+			</ice:menuItem>
+		</ice:menuBar>
+		<br></br>
+		<br></br>
+		
+		<hr></hr>
+		
+		<br></br>
+
+	<ice:dataTable
+		id="lexicon"
+		rows="10"
+		value="#{table.lexiconList}"
+		var="row"
+		binding="#{table.table}"
+		>
+		<ice:column id="word">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['phoneticTuning.Word']}"/>
+			</f:facet>
+			<ice:inputText value="#{row.word}"/>
+		</ice:column>
+				
+		<ice:column id="full">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['lexicon.Full']}"/>
+			</f:facet>
+			<ice:inputText value="#{row.full}"/>
+		</ice:column>
+		<ice:column id="soundslike">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['lexicon.Soundslike']}"/>
+			</f:facet>
+			<ice:inputText value="#{row.soundslike}"/>
+		</ice:column>				
+		<ice:column id="baseform">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['phoneticTuning.Baseform']}"/>
+			</f:facet>
+			<ice:inputText value="#{row.phonetic}"/>
+		</ice:column>
+		<ice:column id="language">
+			<ice:selectOneMenu value="#{userSettings.settings['languageTuning.Language']}">
+    			<f:selectItem itemLabel="DE" itemValue="de"/>
+    			<f:selectItem itemLabel="EN" itemValue="en"/>
+    		</ice:selectOneMenu>
+		</ice:column>
+		<ice:column id="remove">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['lexicon.Remove']}"/>
+			</f:facet>
+			<ice:commandButton
+				type="submit"
+				value="#{userSettings.settings['lexicon.Remove']}"
+				actionListener="#{table.removeRowAction}"
+				/>
+		</ice:column>
+		<ice:column id="listenLexicon">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['phoneticTuning.Listen']}"/>
+			</f:facet>
+			<ice:commandButton
+				type="submit"
+				value="#{userSettings.settings['phoneticTuning.Listen']}"
+				actionListener="#{table.synthesizeAction}"
+			/>			
+		</ice:column>		
+	</ice:dataTable>
+	
+	<ice:commandButton
+		type="submit"
+		value="#{userSettings.settings['lexicon.Add']}"
+		actionListener="#{table.addRowAction}"
+		>
+	</ice:commandButton>
+
+	<ice:dataPaginator 
+		id="dataScroll_1"                  
+        for="lexicon" 
+        fastStep="3" 
+        paginator="true" 
+        paginatorMaxPages="4" 
+        >
+        <f:facet name="first">
+        	<ice:graphicImage 
+            	id="firstpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-first.gif"                                      
+                style="border:none;"
+                title="1"
+                />
+       	</f:facet>
+   		<f:facet name="last">
+        	<ice:graphicImage 
+            	id="lastpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-last.gif"
+                style="border:none;"
+                title="2"
+                />
+      	</f:facet>
+        <f:facet name="previous">
+        	<ice:graphicImage 
+            	id="previouspage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-previous.gif"
+                style="border:none;"
+                title="3"
+                />
+       	</f:facet>
+        <f:facet name="next">
+        	<ice:graphicImage 
+            	id="nextpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-next.gif"
+                style="border:none;"
+                title="4"/>
+       	</f:facet>
+        <f:facet name="fastforward">
+        	<ice:graphicImage 
+            	id="fastforward_1"
+                url="/xmlhttp/css/xp/css-images/arrow-ff.gif"
+                style="border:none;"
+                title="5"
+                />
+       	</f:facet>
+        <f:facet name="fastrewind">
+        	<ice:graphicImage 
+            	id="fastrewind_1"
+                url="/xmlhttp/css/xp/css-images/arrow-fr.gif"
+                style="border:none;"
+                title="6"/>
+        </f:facet>
+	</ice:dataPaginator>
+	
+</div>

@@ -1,0 +1,17 @@
+<ui:composition 
+	template="/WEB-INF/template/main-template.jspx"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+             >
+
+<!--     params for page titles-->
+    <ui:param name="pageTitle" value="Home" />
+    <ui:param name="contentHeader" value=""/>
+
+    <ui:define name="content">
+<!--	   <ui:include src="/WEB-INF/content/welcomeUser.jspx"/>-->
+    	<ui:include src="/WEB-INF/content/main-content.jspx"/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,33 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+    
+    <ice:panelGrid visible="#{projectManager.showSettings}" rendered="#{projectManager.showSettings}">
+    
+<!--    <ice:outputText value="show the projects Settings!"/>-->
+    
+       <ice:dataTable
+    	id="projectSettings"
+    	rows = "#{projectManager.size}"
+    	value="#{projectManager.settingsArray}"
+    	var="row"
+    	binding="#{projectManager.settingsTable}"
+    	>
+			<ice:column id="id">
+				<f:facet name="header">
+					<ice:outputText value="#{userSettings.settings['data.projectID']}"/>
+				</f:facet>
+				<ice:inputText
+					value="#{row.id}"/>
+			</ice:column>
+			<ice:column id="lex">
+				<f:facet name="header">
+					<ice:outputText value="#{userSettings.settings['mainMenu.LexiconHeader']}"/>
+				</f:facet>
+				<ice:outputText
+					value="#{row.lex}"/>
+			</ice:column>
+		</ice:dataTable>
+    </ice:panelGrid>
+</div>

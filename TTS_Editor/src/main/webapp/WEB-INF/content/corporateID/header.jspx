@@ -1,0 +1,53 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	<tr>
+		<td align="left" width="49%" valign="center"
+			bgcolor="#{corporateIDSettings.settings['headerBar.colour']}"
+			style="border: medium none;"><font
+			style="color: white; font-family: arial; font-size: 22pt;"> <b>&amp;nbsp;&amp;nbsp;#{projectSettings.settings['project.name']}</b>
+		</font></td>
+		<td align="right" width="49%" valign="center" bgcolor="#990033"
+			style="border: medium none;"></td>
+		<td bgcolor="#{corporateIDSettings.settings['headerLogo.colour']}"
+			style="border: medium none;" colspan="2"><img height="120"
+			src="#{facesContext.externalContext.requestContextPath}/img/logo.jpg" />
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="#{corporateIDSettings.settings['linkBar.colour']}"></td>
+		<td bgcolor="#{corporateIDSettings.settings['linkBar.colour']}">
+			<div align="right" style="margin-right: 10px;">
+				<ice:form id="langForm">
+					<ice:selectOneListbox id="ch_lang" size="1" value="de"
+						partialSubmit="true" valueChangeListener="#{userSettings.newLang}">
+						<f:selectItem itemLabel="Deutsch" itemValue="de" id="de" />
+						<f:selectItem itemLabel="English" itemValue="en" id="en" />
+					</ice:selectOneListbox>
+				</ice:form>
+			</div>
+		</td>
+		<td bgcolor="#{corporateIDSettings.settings['linkBar.colour']}"
+			align="left" width="49%"><ice:panelGroup id="col3"
+				style="margin-left: 10px;">
+				<h:outputLink id="link5"
+					value="#{facesContext.externalContext.requestContextPath}/">
+					<h:outputText value="Impressum" />
+				</h:outputLink>
+			</ice:panelGroup></td>
+		<td bgcolor="#{corporateIDSettings.settings['linkBar.colour']}"
+			align="right" width="49%">
+			<div align="right" style="margin-right: 10px;">
+				<!--  Logout button -->
+				<ice:panelGroup rendered="true" id="col4">
+					<ice:form id="logoutForm">
+						<ice:commandLink value="#{sessionManagement.logoutText}"
+							action="#{sessionManagement.logout}" />
+					</ice:form>
+				</ice:panelGroup>
+			</div>
+		</td>
+	</tr>
+</table>

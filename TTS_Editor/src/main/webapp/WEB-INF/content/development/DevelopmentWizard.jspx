@@ -1,0 +1,196 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2"
+		style="text-align: center;">
+		<ice:outputText style="font-size: small"
+			value="#{userSettings.settings['development.fileUploadMessage']}"
+			rendered="#{developmentManagement.showUpload}"
+			visible="#{developmentManagement.showUpload}">
+		</ice:outputText>
+		<br />
+		<ice:inputFile id="uploadDevModeDataWav"
+			actionListener="#{popupManager.uploadActionListener}"
+			progressListener="#{popupManager.fileUploadProgressModel}"
+			rendered="#{developmentManagement.showUpload}"
+			visible="#{developmentManagement.showUpload}">
+		</ice:inputFile>
+		<ice:message style="color: red; font-weight: bold;"
+			id="modelFileError" for="uploadDevModeDataWav" />
+		<ice:outputProgress value="#{popupManager.fileProgressModel}"
+			labelComplete="Upload Done" styleClass="uploadProgressBar"
+			rendered="#{popupManager.rendModelUploadPart2}" />
+	</ice:panelGrid>
+
+	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2"
+		style="text-align: center;">
+		<!--		<ice:outputText 
+					style="font-size: small"
+					value="Eine Zip Datei mit den dazugehoerigen Texten."
+					>
+								value="#{userSettings.settings['constraints.UTF8-Warning']}"
+				</ice:outputText>
+				<br />
+				<ice:inputFile
+					id="uploadDevModeDataText" 
+					actionListener="#{popupManager.uploadActionListener}"
+					>						
+				</ice:inputFile>-->
+		<ice:outputText
+			value="#{userSettings.settings['development.MissingItemsWarning']}"
+			rendered="#{developmentManagement.showMissingItems}"
+			visible="#{developmentManagement.showMissingItems}">
+		</ice:outputText>
+		<br />
+		<ice:commandButton
+			value="#{userSettings.settings['welcome.continue']}" id="devCont"
+			rendered="#{developmentManagement.showUpload}"
+			visible="#{developmentManagement.showUpload}"
+			actionListener="#{developmentManagement.startDevelopmentProcess}">
+		</ice:commandButton>
+<!-- 				<ice:commandButton
+					value="#{userSettings.settings['development.RecordVoice']}"
+			   		id="devRecord"
+			   		actionListener="#{developmentManagement.startRecordingProcess}"
+			   		rendered="#{developmentManagement.showUpload}"
+			   		visible="#{developmentManagement.showUpload}"		
+			   		>
+				</ice:commandButton>
+				<ice:commandButton
+					value="#{userSettings.settings['development.TestVoice']}"
+					id="voiceTest"
+					actionListener="#{developmentManagement.testVoice}"
+					rendered="#{developmentManagement.showTest}"
+					visible="#{developmentManagement.showTest}"			
+					>
+				</ice:commandButton> -->
+	</ice:panelGrid>
+<!-- 
+			<ice:panelGrid 
+	   		width="100%" 
+	   		cellpadding="0" 
+	   		cellspacing="0" 
+	   		columns="2" 
+	   		style="text-align: center;"
+	   		rendered="#{developmentManagement.showScriptData}"
+	   		visible="#{developmentManagement.showScriptData}"
+	   		>
+	         <ice:outputMedia 
+	         	id="streamRecorder" 
+		        player="flash" 
+		        standbyText="loading.."
+		        source="streamRecorder.swf"
+		        style="width:400px;height:200px; margin-top: 15px;">	                         
+		        <f:param
+		        	name="allowfullscreen"
+	                value="true"/>
+	           	<f:param 
+	            	name="stretching"
+	                value="fill"/>
+	           	<f:param 
+	              	name="allowscriptaccess"
+	            	value="always"/>
+	            <f:param 
+	            	name="play" 
+	                value="true"/>
+				<f:param 
+					name="menu" 
+					value="true"/>   	
+				<f:param 
+					name="flashvars" 
+					value="uri=#{Record.streamerURI}" /> 
+			        </ice:outputMedia>
+
+		<ice:inputText id="inputFile" partialSubmit="true" valueChangeListener="#{Record.fileNameListener}" value="#{Record.fileName}" visible="false"></ice:inputText>
+				<ice:inputHidden 
+					id="inputFile" 
+					partialSubmit="true"
+					valueChangeListener="#{Record.fileNameListener}" 
+					value="#{Record.fileName}"
+					binding="#{Record.fileNameSelection}"
+					>
+				</ice:inputHidden>
+	   		</ice:panelGrid>
+
+	   		<ice:panelGrid
+	   		width="100%" 
+	   		cellpadding="0" 
+	   		cellspacing="0" 
+	   		columns="2" 
+	   		style="text-align: center;"
+	   		rendered="#{developmentManagement.showScriptUploading}"
+	   		visible="#{developmentManagement.showScriptUploading}"
+	   		>
+	   		<ice:outputText 
+				style="font-size: small" 
+				value="#{userSettings.settings['development.UploadScript']}"
+				>
+			</ice:outputText>
+			<br />
+			<ice:inputFile
+				id="uploadDevModeDataScript"  
+				actionListener="#{popupManager.uploadActionListener}"
+				>
+				progressListener="#{popupManager.fileUploadProgressModel}"
+			</ice:inputFile>
+	   		</ice:panelGrid>
+
+	   		<ice:panelGrid
+	   		width="100%" 
+	   		cellpadding="0" 
+	   		cellspacing="0" 
+	   		columns="3" 
+	   		style="text-align: center;"
+	   		rendered="#{developmentManagement.showScriptData}"
+	   		visible="#{developmentManagement.showScriptData}"
+	   		>
+	   		<ice:inputTextarea
+				id="currentScriptNum"
+				style="width: 500px;"
+				readonly="true"
+				cols="80"
+				rows="5"
+				visible="#{developmentManagement.showScriptItems}"
+				value="#{developmentManagement.currentPos}"
+				>
+			</ice:inputTextarea>
+			<ice:inputTextarea
+				id="currentScriptItem"
+				style="width: 500px;"
+				readonly="true"
+				cols="80"
+				rows="5"
+				visible="#{developmentManagement.showScriptItems}"
+				value="#{developmentManagement.currentSentence}"
+				>
+			</ice:inputTextarea>
+			 <ice:inputTextarea
+				id="currentScriptComment"
+				style="width: 500px;"
+				readonly="true"
+				cols="80"
+				rows="5"
+				visible="#{developmentManagement.showScriptItems}"
+				value="#{developmentManagement.currentComment}"
+				>			
+			</ice:inputTextarea>
+				<ice:commandButton
+				type="submit"
+				value="Save"
+				rendered="#{developmentManagement.showScriptItems}"
+				visible="#{developmentManagement.showScriptItems}"
+				actionListener="#{developmentManagement.save}"
+			/>
+			<ice:commandButton
+				type="submit"
+				value="Next Item"
+				rendered="#{developmentManagement.showScriptItems}"
+				visible="#{developmentManagement.showScriptItems}"
+				actionListener="#{developmentManagement.showNextScriptItem}"
+			/>
+
+	   		</ice:panelGrid>
+-->
+</div>

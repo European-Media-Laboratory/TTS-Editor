@@ -1,0 +1,51 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:outputText 
+		value="Show QuickStart Guide"/>
+		<br></br>
+		<ice:commandButton
+			id="quickStart"
+			type="submit"
+			value="#{helpManager.actionQuickStart}"
+			actionListener="#{helpManager.showHelp}"
+			>
+		</ice:commandButton>			
+
+		<ice:outputText
+			value="Show General Help" />
+			<br></br>
+		<ice:commandButton
+			id="general"
+			type="submit"
+			value="#{helpManager.actionGeneral}"
+			actionListener="#{helpManager.showHelp}"
+			>
+		</ice:commandButton>
+
+		<ice:outputText
+			value="Show Controls Help"/>
+			<br></br>
+		<ice:commandButton
+			id="controls"
+			type="submit"
+			value="#{helpManager.actionControls}"
+			actionListener="#{helpManager.showHelp}"
+			>
+		</ice:commandButton>
+
+		<ice:outputText
+			value="Show Information About the TTS Editor" />
+			<br></br>
+		<ice:commandButton
+			id="about"
+			type="submit"
+			value="#{helpManager.actionAbout}"
+			actionListener="#{helpManager.showHelp}"
+			>
+		</ice:commandButton>
+
+</div>

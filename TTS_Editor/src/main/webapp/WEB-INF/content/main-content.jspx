@@ -1,0 +1,113 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     	
+    <ice:form id="main_form">
+ 		<ice:panelTabSet 
+ 			styleClass="tabSet" 
+ 			tabPlacement="top" 
+ 			align="left" 
+ 			selectedIndex="#{sessionManagement.tabIndex}"
+ 			>
+			<ui:include src="Popup/PopUpSave.jspx"/>
+			<ui:include src="Popup/PopupFileLoad.jspx"/>
+			<ui:include src="Popup/PopupProjectID.jspx"/>
+			<ui:include src="Popup/loadLexiconPopup.jspx"/>
+			<ui:include src="Popup/arbitraryError.jspx"/>
+			<ui:include src="Popup/newProjectWarnung.jspx"/>
+			<ui:include src="Popup/downloadTextPopup.jspx"/>	
+			<ui:include src="subtitling/waitingPopup.jspx"/>
+			<ui:include src="Popup/downloadAllSoundPopup.jspx"/>	
+			<ui:include src="Popup/contextPitchTuningPopup.jspx"/>
+			<ui:include src="Popup/contextRateTuningPopup.jspx"/>
+			<ice:panelTab
+				label="#{userSettings.settings['welcome.welcome']}"
+				rendered="#{sessionManagement.showWelcome}"
+				>
+				<ui:include src="welcomeUser.jspx"/>
+			</ice:panelTab>
+	    	<ice:panelTab 
+	    		label="#{userSettings.settings['tabSettings.Editor']}"
+ 				rendered="#{sessionManagement.showEditor}"	    		
+	    		>
+				<ui:include src="editor/editor.jspx"/>
+				<ui:include src="Popup/errorNoTextPopup.jspx"/>
+				<ui:include src="Popup/errorSpeedDecreasePopup.jspx"/>
+				<ui:include src="Popup/errorSpeedIncreasePopup.jspx"/>
+				<ui:include src="Popup/errorPitchDecreasePopup.jspx"/>
+				<ui:include src="Popup/errorPitchIncreasePopup.jspx"/>
+				<ui:include src="Popup/pauseInsertionPopup.jspx"/>
+				<ui:include src="Popup/constraintWarning.jspx"/>	
+				<ui:include src="Popup/downloadPopup.jspx"/>						
+				<ui:include src="Popup/ProjectExistsWarning.jspx"/>						
+			</ice:panelTab>
+			<ice:panelTab 
+				label="#{userSettings.settings['tabSettings.PhoneticTuning']}"
+				rendered="#{tuningManager.showPhonetic}"
+				>
+				<ui:include src="tuning/PhoneticTuning.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab 
+				label="#{userSettings.settings['tabSettings.StressTuning']}"
+				rendered="#{tuningManager.showStress}">
+				<ui:include src="tuning/StressTuning3.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.LanguageTuning']}"
+				rendered="#{tuningManager.showLangTuning}">
+				<ui:include src="tuning/LanguageTuning.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab 
+				label="#{userSettings.settings['tabSettings.Lexicon']}"
+				rendered="#{table.showLexicon}">
+				<ui:include src="lexicon/lexicon.jspx"/>
+				<ui:include src="Popup/errorEmptyLexPopup.jspx"/>
+				<ui:include src="Popup/errorNoEntriesPopup.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.Effects']}"
+				rendered="#{effectsManager.showEffects}">
+				<ui:include src="effects/effects.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.Constraints']}"
+				rendered="#{subtitlingManager.showConstraints}"
+				>
+				<ui:include src="subtitling/constraints.jspx"/>
+				<ui:include src="Popup/pauseSplittingPopup.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.Preview']}"
+				rendered="#{subtitlingManager.showPreview}"
+				>
+				<ui:include src="subtitling/preview.jspx"/>
+				
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.UserSettings']}"
+				rendered="#{sessionManagement.showEditor}"
+				>
+				<ui:include src="user/settings.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab label="#{userSettings.settings['tabSettings.Help']}">
+				<ui:include src="helpDocs/help2.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab 
+				label="#{userSettings.settings['tabSettings.ProjectSettings']}"
+				align="right"
+				rendered="#{projectManager.showSettings}"
+				>
+				<ui:include src="project/ProjectSettings.jspx"/>
+			</ice:panelTab>
+			<ice:panelTab
+				label="#{userSettings.settings['tabSettings.DevModeLabel']}"
+				align="right"
+				rendered="#{sessionManagement.showDevWizard}"
+				>
+				<ui:include src="development/DevelopmentWizard.jspx"/>				
+			</ice:panelTab>
+		</ice:panelTabSet>
+    </ice:form>
+</div>

@@ -1,0 +1,61 @@
+******* WARNING ***********
+
+This software just provides a framework. The .war can be build and
+should also work, but you CANNOT synthesize anything with it, do
+automatic speech recognition or anything else. It just provides the
+graphical user interface and some basic I/O functionality. For details
+please see the sections below on how you can make it work.
+
+******* ******* ***********
+
+* Prerequisites
+
+These are tools that we use from the command-line, which have to be
+installed on your machine in order to run the TTS Editor.
+
+- ffmpeg - xuggle version (i.e. http://build.xuggle.com/job/xuggler_jdk5_stable/100/artifact/workingcopy/dist/bin/xuggle-ffmpeg.4.0.1023-i686-pc-linux-gnu.sh)
+- lame
+- sox
+- Red5
+- Apache Geronimo (only tested with >= 2.1, we recommend using Geronimo-Tomcat)
+- Java/JRE
+- maven (for building the WAR only)
+
+* How to build
+
+Go to the base inventory, where the TTS_Editor and TTS_Editor_API
+directories are located and type:
+
+   mvn package
+
+on the command line.
+
+In the sub-folder "TTS_Editor/target" you should find a .war-file,
+which you can deploy to your web application server.
+
+* Deployment
+
+Before you deploy the application to your J2EE server, make sure to
+create a security realm called "TTSEditor". In the
+"geronimo-configuration" folder, you'll find two sample property files
+and a deployment plan for such a security realm. The user / password
+combination would be "user" and "password".
+
+* To implement
+
+Once you built a .war you can deploy it to your web application
+server. But you will not be able to do anything - except of looking at
+it. In order to actually do something with it you will need at least a
+TTS Engine to which you can send text to be synthesized. To this end
+you will have to implement the synthesizer interface in the API.
+
+The same is true for the recognizer and the g2p method, in case you
+want to use those.
+
+* License
+
+The project is licensed under the Eclipse Public License (EPL) a copy
+can be found in the LICENSE text file.
+
+As long as not stated otherwise within any files, the individual files
+are contributed by EML European Media Laboratory GmbH.

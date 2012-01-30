@@ -1,0 +1,50 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+    
+<form id="FormLogin" name="FormLogin" action="j_security_check" method="POST">
+  <table id="tableLogin" border="0" cellpadding="0" cellspacing="4">
+    <tr>
+ 
+<!-- 	<b> -->
+<!-- 		Please be aware that of now there is no TTS Engine running in the background!-->
+<!-- 		Therefore, functions that are related to synthesizing and listening are non-functional.-->
+<!-- 	</b>-->
+<!--    <br></br>-->
+<!--    <br></br>-->
+<!-- 	<b> -->
+<!-- 		Momentan laeuft noch keine TTS Engine im Hintergrund. -->
+<!-- 		Daher sind momentan alle Funktionalitaeten, die mit Synthese oder dem Anhoeren des-->
+<!-- 		Ergebnisses verbunden sind, nicht funktionsfaehig.-->
+<!-- 	</b>-->
+
+    
+    <br></br>
+    <br></br>
+    <br></br>
+   
+<!--      <td align="right"><ice:outputText value="#{userSettings.settings['login.user']}"/></td>-->
+	<td align="right"><ice:outputText value="Login"/></td>
+      <td><input id="acc" name="j_username" type="text" size="20" maxlength="40" /></td>
+    </tr>
+    <tr>
+<!--      <td align="right"><ice:outputText value="#{userSettings.settings['login.pw']}"/></td>-->
+	<td align="right"><ice:outputText value="Passwort"/></td>
+      <td><input id="pw" name="j_password" type="password" size="20" maxlength="15" /></td>
+    </tr>
+    <tr>
+<!--      <td align="right"><input type="reset" name="Abbrechen" value="#{userSettings.settings['login.reset']}"/></td>-->
+<!--      <td><input type="submit" name="Anmelden" value="#{userSettings.settings['login.login']}"/></td>-->
+	<td align="right"><input type="reset" name="Abbrechen" value="Abbrechen"/></td>
+      <td><input type="submit" name="Anmelden" value="Anmelden"/></td>
+    </tr>
+    <tr>
+    <td align="right"></td>
+    <td><p></p></td>
+    </tr>
+  </table>
+</form>
+
+</div>

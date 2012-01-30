@@ -1,0 +1,14 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+     	xmlns:ice="http://www.icesoft.com/icefaces/component">
+<h3> Phonemeinventory including examples for German - depends on you g2p method .... </h3>
+
+<table>
+	<tr>
+		<th>Buchstabe</th>
+		<th>Phonem</th>
+		<th>Beispiel</th>
+	</tr>
+</table>
+</div>

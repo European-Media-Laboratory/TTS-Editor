@@ -1,0 +1,292 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:eml="http://eml.development.de/eml"
+    >
+	<ice:panelGroup styleClass="componentBox">
+
+	<ice:outputText 
+			style="font-size: small" 
+			value="#{userSettings.settings['subtitles.movieUploadMessage']}"
+			rendered="#{subtitlingManager.showUpload}"
+			visible="#{subtitlingManager.showUpload}"
+			>
+		</ice:outputText>
+		
+		<br />
+		
+		<ice:outputText value="Please specify the language the movie is in:"/>
+		<ice:selectOneMenu 
+			value="recoLang"
+	 		valueChangeListener="#{subtitlingManager.recoLangListener}"
+			partialSubmit="true"
+			rendered="#{subtitlingManager.showUpload}"
+			visible="#{subtitlingManager.showUpload}"
+		 	>
+			<f:selectItem itemLabel="DE" itemValue="de"/>
+    		<f:selectItem itemLabel="EN_UK" itemValue="enGB"/>
+    		<f:selectItem itemLabel="EN_US" itemValue="enUS"/>
+    	</ice:selectOneMenu>
+    	
+		<br />
+		
+		<ice:inputFile
+			id="uploadMovie"  
+			actionListener="#{popupManager.uploadActionListener}"
+			uploadDirectoryAbsolute="true"
+			uploadDirectory="#{userSettings.userPath}"
+			rendered="#{subtitlingManager.showUpload}"
+			visible="#{subtitlingManager.showUpload}"
+			>						
+<!--			progressListener="#{popupManager.fileUploadProgressModel}"-->
+		</ice:inputFile>
+<!--		<ice:message style="color: red; font-weight: bold;" id="modelFileError" for="uploadDevModeDataWav"/>-->
+<!--		<ice:outputProgress -->
+<!--		 	value="#{popupManager.fileProgressModel}" -->
+<!--			labelComplete="Upload Done" -->
+<!--			styleClass="uploadProgressBar"-->
+<!--			rendered="#{popupManager.rendModelUploadPart2}"-->
+<!--				/>-->
+<!--	-->
+
+		<ice:outputMedia 
+			id="outputMedia" 
+			player="flash" 
+	    	standbyText="loading.."
+	    	source="/media/player.swf"
+   	    	rendered="#{subtitlingManager.showPlayer}"
+   	    	style="width:800px;height:450px;"
+	    	>	
+	    	<f:param 
+				name="allowfullscreen"
+            	value="true"
+            />
+        	<f:param 
+        		name="stretching"
+            	value="none"
+            />
+			<f:param 
+				name="flashvars" 
+				value="#{subtitlingManager.flashvars}"
+			/>
+		</ice:outputMedia>
+		<ice:panelGrid
+			columns="3"
+			>
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="#{userSettings.settings['preview.loadFile']}"-->
+<!--			actionListener="#{subtitlingManager.loadNewFile}"		-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="#{userSettings.settings['preview.newCaptions']}"			-->
+<!--			actionListener="#{subtitlingManager.createNewCaptions}"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="Continue to next Chunk"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--		/>-->
+		<ice:outputText
+			id="previousTimeIndex"
+			visible="#{subtitlingManager.showPlayer}"
+			value="#{subtitlingManager.previousTimeIndex}"
+		/>
+		<ice:outputText
+			id="currentTimeIndex"
+			visible="#{subtitlingManager.showPlayer}"
+			value="#{subtitlingManager.currentTimeIndex}"
+		/>
+		<ice:outputText
+			id="nextTimeIndex"
+			visible="#{subtitlingManager.showPlayer}"
+			value="#{subtitlingManager.nextTimeIndex}"
+		/>
+		<ice:inputTextarea
+			id="previousTranscription"
+			style="width: 500px;"
+			rows="5"
+			cols="50"
+			visible="#{subtitlingManager.showPlayer}"
+			value="#{subtitlingManager.previousDescription}"
+			readonly="true"
+			disabled="true"
+			>
+		</ice:inputTextarea>
+		<ice:inputTextarea
+			id="descriptionEditor"
+			rows="5"
+			cols="50"
+			value="#{subtitlingManager.currentDescription}"
+			visible="#{subtitlingManager.showPlayer}"
+			rendered="#{subtitlingManager.showPlayer}"
+			valueChangeListener="#{subtitlingManager.descriptionChangeListener}"
+			>
+		</ice:inputTextarea>
+		<ice:inputTextarea
+			id="nextTranscription"
+			style="width: 500px;"
+			rows="5"
+			cols="50"
+			visible="#{subtitlingManager.showPlayer}"
+			value="#{subtitlingManager.nextDescription}"
+			readonly="true"
+			disabled="true"
+			>
+		</ice:inputTextarea>
+		<ice:inputTextarea
+			id="hidden"
+			style="visibility:hidden;"
+			rows="2"
+			cols="50"
+		>
+		</ice:inputTextarea>
+		<ice:panelGroup>
+		<ice:commandButton
+			type="submit"
+			value="#{userSettings.settings['preview.previousChunk']}"
+			rendered="#{subtitlingManager.showPlayer}"
+			visible="#{subtitlingManager.showPlayer}"
+			actionListener="#{subtitlingManager.goToPreviousChunk}"
+		/>
+		<ice:commandButton
+			type="submit"
+			value="#{userSettings.settings['preview.applyChanges']}"
+			rendered="#{subtitlingManager.showPlayer}"
+			visible="#{subtitlingManager.showPlayer}"
+			actionListener="#{subtitlingManager.applyChanges}"
+		/>
+		<ice:commandButton
+			type="submit"
+			value="#{userSettings.settings['preview.nextChunk']}"
+			rendered="#{subtitlingManager.showPlayer}"
+			visible="#{subtitlingManager.showPlayer}"
+			actionListener="#{subtitlingManager.goToNextChunk}"
+		/>
+		</ice:panelGroup>
+		<ice:inputTextarea
+			id="hidden"
+			style="visibility:hidden;"
+			rows="2"
+			cols="50"
+		>
+		</ice:inputTextarea>
+		<ice:inputTextarea
+			id="hidden"
+			style="visibility:hidden;"
+			rows="2"
+			cols="50"
+		>
+		</ice:inputTextarea>
+		<ice:menuBar 
+			orientation="horizontal"
+			style="width:auto" 
+			rendered="#{subtitlingManager.showPlayer}"
+			visible="#{subtitlingManager.showPlayer}"
+			>
+			<ice:menuItem 
+				value="#{userSettings.settings['preview.move']}"
+				id="move"
+				styleClass="widthSetting"
+				>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.prevPause']}"
+					id="prevPause"
+					actionListener="#{subtitlingManager.goToPreviousPause}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.nextPause']}"
+					id="nextPause"
+					actionListener="#{subtitlingManager.goToNextPause}"
+					>
+				</ice:menuItem>				
+			</ice:menuItem>
+			<ice:menuItem 
+				value="#{userSettings.settings['preview.options']}"
+				id="options"
+				styleClass="widthSetting"
+				>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.createPreviewHere']}"
+					id="prevUpToHere"
+					actionListener="#{subtitlingManager.createPreviewSoFar}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.createPreviewChunk']}"
+					id="prevCurrent"
+					actionListener="#{subtitlingManager.createCurrentPreview}"
+					>
+				</ice:menuItem>		
+				<ice:menuItemSeparator/>	
+				<ice:menuItem
+					value="#{userSettings.settings['preview.showPrevious']}"
+					id="showPrev"
+					actionListener="#{subtitlingManager.showChunk}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.showCurrent']}"
+					id="showCurrent"
+					actionListener="#{subtitlingManager.showChunk}"
+					>
+				</ice:menuItem>
+				<ice:menuItem
+					value="#{userSettings.settings['preview.showNext']}"
+					id="showNext"
+					actionListener="#{subtitlingManager.showChunk}"
+					>
+				</ice:menuItem>			
+			</ice:menuItem>
+		</ice:menuBar>
+	</ice:panelGrid>
+<!--		<ice:panelGrid-->
+<!--			columns="2"-->
+<!--		>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="prevPause"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--			actionListener="#{subtitlingManager.goToPreviousPause}"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="empty"-->
+<!--			rendered="false"-->
+<!--			visible="false"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="nextPause"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--			actionListener="#{subtitlingManager.goToNextPause}"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="create Preview up to here"-->
+<!--			actionListener="#{subtitlingManager.createPreviewSoFar}"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"-->
+<!--		/>-->
+<!--		<ice:commandButton-->
+<!--			type="submit"-->
+<!--			value="create Preview for this chunk"-->
+<!--			actionListener="#{subtitlingManager.createCurrentPreview}"-->
+<!--			rendered="#{subtitlingManager.showPlayer}"-->
+<!--			visible="#{subtitlingManager.showPlayer}"			-->
+<!--		/>-->
+<!--		-->
+<!--		</ice:panelGrid>-->
+	</ice:panelGroup>
+</div>

@@ -1,0 +1,64 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     
+     Willkommen - Bienvenue - Welcome #{userSettings.userName}
+
+	<br></br>
+	<br></br>
+	<br></br>
+    <br></br>
+    
+	<ice:outputText 
+		style="font-size: huge; font-weight: bold;"
+		value="#{userSettings.settings['userSettings.NoVoicesWarning']}"
+		rendered="#{empty userSettings.voiceList}"
+		/>
+
+<!--	<ice:outputText value="#{userSettings.voiceListWarning}"/>-->
+
+	<ice:panelGrid columns="3">
+		<ice:outputText value="Es kann ein neues Projekt angelegt werden:" />			
+		<ice:inputText
+    		value="Enter Name"
+    		size="20"
+    		id="newProjectName"
+    		valueChangeListener="#{sessionManagement.newProjectName}"
+    		>
+   		</ice:inputText>
+   		<ice:commandButton
+   			value="#{userSettings.settings['welcome.continue']}"
+   			type="submit"
+   			id="newProject"
+	   		actionListener="#{sessionManagement.continueLogin}"
+   			>
+   		</ice:commandButton>
+   		<ice:outputText value="Oder ein vorhandenes Projekt geladen werden:"/>
+		<ice:selectOneMenu
+			value="#{userSettings.settings['userSettings.ProjectListName']}"
+			id="projectSelection"
+			valueChangeListener="#{sessionManagement.projectSetting}"
+			>
+			<f:selectItems
+				value="#{userSettings.projectList}"
+			/>
+    	</ice:selectOneMenu>
+    	<ice:commandButton
+   			value="#{userSettings.settings['welcome.continue']}"
+   			type="submit"
+   			id="openProject"
+   			actionListener="#{sessionManagement.continueLogin}"
+   			>
+	   	</ice:commandButton>
+	   	
+	   	<ice:outputText value="Den Entwickler-Modus starten"/>
+	   	<ice:commandButton
+	   		value="#{userSettings.settings['welcome.continue']}"
+	   		id="dev"
+	   		actionListener="#{sessionManagement.startDevelopment}"
+	   		>
+	   	</ice:commandButton>
+	</ice:panelGrid>   	
+</div>    

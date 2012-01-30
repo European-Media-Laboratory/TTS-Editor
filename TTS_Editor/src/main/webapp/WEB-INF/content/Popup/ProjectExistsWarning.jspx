@@ -1,0 +1,79 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup 
+		autoCentre="true" 
+		visible="#{popupManager.showProjectExistsWarning}" 
+		modal="true" 
+		rendered="#{popupManager.showProjectExistsWarning}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 200px;"
+		>		   
+		<f:facet name="header">
+        	<ice:panelGrid 
+        		width="100%" 
+        		cellpadding="0" 
+        		cellspacing="0" 
+        		columns="2" 
+        		style="text-align: center;"
+        		>
+            	<ice:outputText 
+            		style="color: #FFFFFF;" 
+            		value="#{userSettings.settings['data.projectIDWarning']}"
+            		/>
+               	<ice:commandButton 
+               		image="../img/cancel-small.png" 
+               		action="#{popupManager.cancelPopupAction}" 
+               		alt="close" 
+               		title="#{userSettings.settings['popup.close']}"
+               		/>
+            </ice:panelGrid>
+        </f:facet>
+	    <f:facet name="body">
+           	<ice:panelGrid 
+           		width="100%" 
+           		cellpadding="0" 
+           		cellspacing="0" 
+           		columns="2" 
+           		style="text-align: center;"
+           		>
+			<ice:outputText value="#{popupManager.projectExistsWarningText}"/>
+			<ice:commandButton 
+				id="doOverwrite" 
+				action="#{popupManager.closePopupAction}" 
+				value="Overwrite" 
+				>
+			</ice:commandButton>
+			<ice:commandButton 
+				id="saveNewName" 
+				action="#{popupManager.closePopupAction}" 
+				value="Return" 
+				>
+			</ice:commandButton>
+			
+<!--			<table width="100%" border="0" cellpadding="10" cellspacing="10" style="border-collapse:collapse">-->
+<!--				<tr bgcolor="#E0FFFF">-->
+<!--					<td width="99%" align="left" class="lesen" >-->
+<!-- 						<ice:outputText value="#{LocaleBean.messages['profile.mobile.conf.ok']}"></ice:outputText>-->
+<!--						<ice:inputText value="#{popupManager.saveName}"></ice:inputText>-->
+<!--					</td>-->
+<!--				</tr>-->
+<!--			Buttons-->
+<!--				<tr>-->
+<!--					<td width="99%" align="left">-->
+<!--						<ice:commandButton -->
+<!--							id="saveNewName" -->
+<!--							action="#{popupManager.closePopupAction}" -->
+<!--							value="OK" -->
+<!--							>-->
+<!--						</ice:commandButton>-->
+<!--					</td>					-->
+<!--				</tr>-->
+<!--			</table>-->
+<!--			-->
+			</ice:panelGrid>
+		</f:facet>
+	</ice:panelPopup>
+</div>

@@ -1,0 +1,51 @@
+<jsp:root 
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	>
+    <ice:outputDeclaration 
+    	doctypeRoot="HTML"
+        doctypePublic="-//W3C//DTD HTML 4.01 Transitional//EN"
+        doctypeSystem="http://www.w3.org/TR/html4/loose.dtd" 
+        />
+	<html>
+		<head>
+    		<!-- page title param passed in by param -->
+    		<title>TTS Editor</title>
+    		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    		<meta name="keywords" content="" />
+    		<meta name="description" content="" />
+    		<link href="#{facesContext.externalContext.requestContextPath}/xmlhttp/css/xp/xp.css" rel="stylesheet" type="text/css" />
+			<link href="xpMaMi.css" rel="stylesheet" type="text/css"/>
+			<link href="#{facesContext.externalContext.requestContextPath}/css/override.css" rel="stylesheet" type="text/css" />
+    		<link href="#{facesContext.externalContext.requestContextPath}/css/styles.css" rel="stylesheet" type="text/css"/>
+    		<link rel="SHORTCUT ICON" href="#{facesContext.externalContext.requestContextPath}/img/favicon3.ico" type="image/x-icon"/>
+
+    		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/jscripts/textCopy.js"></script>
+    		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/streamRecorder.js"></script>
+		</head>
+		<body>	    
+			<table border="0" cellspacing="0" cellpadding="0">
+   				<ui:include src="/WEB-INF/content/corporateID/header.jspx"/>
+   			</table>
+    		<table width="100%" border="0" cellpadding="10" cellspacing="10">
+   				<tr>
+        			<td valign="top" width="100%">
+        				<ui:insert name="content">
+            				Default Content
+        				</ui:insert>
+        			</td>
+        		</tr>
+        	</table>
+        	<table border="0" cellspacing="0" cellpadding="15">
+	        	<tr>
+    	    		<td>
+        				<ui:include src="/WEB-INF/content/corporateID/footer.jspx"/>
+        			</td>
+        		</tr>
+        	</table>
+		</body>
+	</html>
+</jsp:root>

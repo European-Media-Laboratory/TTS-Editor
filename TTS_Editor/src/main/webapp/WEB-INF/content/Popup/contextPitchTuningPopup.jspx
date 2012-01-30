@@ -1,0 +1,80 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup 
+		autoCentre="true" 
+		visible="#{synthesize.contextPitchPopup}" 
+		modal="true" 
+		rendered="#{synthesize.contextPitchPopup}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 300px;"
+		>
+		
+		<f:facet name="header">
+        	<ice:panelGrid 
+        		width="100%" 
+        		cellpadding="0" 
+        		cellspacing="0" 
+        		columns="2" 
+        		style="text-align: center;"
+        		>
+            	<ice:outputText 
+            		style="color: #FFFFFF;" 
+            		value="#{userSettings.settings['popup.localPitchTuning']}"
+            		/>
+               	<ice:commandButton 
+               		image="../img/cancel-small.png" 
+               		action="#{synthesize.closePopupAction}" 
+               		alt="close" 
+               		title="Close"
+               		/>
+            </ice:panelGrid>
+        </f:facet>
+        <f:facet name="body">
+       		<table 
+       			width="100%" 
+       			border="0" 
+       			cellpadding="10" 
+       			cellspacing="10" 
+       			style="border-collapse:collapse"
+       			>
+				<tr bgcolor="#E0FFFF">
+					<td 
+						width="99%" 
+						align="left" 
+						class="lesen" 
+						>
+						<ice:outputText value="#{userSettings.settings['synthesis.Pitch']}:"/>
+						<ice:inputText 
+							id="currentPitch"
+							value="#{synthesize.contextPitch}"
+							maxlength="3"
+							size="3"
+						/>
+						<ice:commandButton
+							value="#{userSettings.settings['synthesis.Lower']}"
+							id="contextPitchDown"
+							type="submit"
+							actionListener="#{synthesize.decreaseContextPitch}"
+							>
+						</ice:commandButton>
+						<ice:commandButton
+							value="#{userSettings.settings['synthesis.Higher']}"
+							type="submit"
+							id="contextPitchUp"
+							actionListener="#{synthesize.increaseContextPitch}"
+							>
+						</ice:commandButton>
+						<ice:commandButton
+							value="OK"
+							actionListener="#{synthesize.closeContextPitchChangeAction}"
+							>
+						</ice:commandButton>
+					</td>
+				</tr>
+       		</table>
+        </f:facet>
+	</ice:panelPopup>
+</div>

@@ -1,0 +1,47 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+<!-- Increas/Decrease the loundness of the background sounds -->
+<!-- Show which file is currently used for background -->
+<!-- Allow for changing this file -->
+
+	<ice:outputText value="#{userSettings.settings['effects.currentBackgroundFile']}:"/>
+	<ice:outputText value="#{effectsManager.backgroundFileName}"/>
+	<ice:commandButton
+		value="#{userSettings.settings['effects.change']}"
+		id="mix"
+		actionListener="#{popupManager.openFileOpenDialog}"
+		>
+	</ice:commandButton>
+
+	<ice:outputText value="#{userSettings.settings['effects.Loudness']}:"/>
+		<ice:inputText 
+			id="currentBackgroundLoudness"
+			value="#{effectsManager.loudness}"
+			maxlength="3"
+			size="3"
+		/>
+	<ice:commandButton
+		value="#{userSettings.settings['synthesis.Lower']}"
+		type="submit"
+		id="loudDown"
+		actionListener="#{effectsManager.decreaseLoudness}"
+		>
+	</ice:commandButton>
+	<ice:commandButton
+		value="#{userSettings.settings['synthesis.Higher']}"
+		type="submit"
+		id="loudUp"
+		actionListener="#{effectsManager.increaseLoudness}"
+		>
+	</ice:commandButton>
+	<ice:commandButton
+		value="#{userSettings.settings['effects.remix']}"
+		type="submit"
+		id="remix"
+		actionListener="#{effectsManager.mixAction}"
+		>
+	</ice:commandButton>
+</div>

@@ -1,0 +1,144 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     	
+    <ice:panelGrid visible="#{tuningManager.showStress}" rendered="#{tuningManager.showStress}">
+    
+    <ice:commandButton
+    	value="#{userSettings.settings['tab.Close']}"
+		type="submit"
+		id="closeStressTuningTab"
+		actionListener="#{tuningManager.closeTabAction}"
+	    >
+    </ice:commandButton>
+    
+<!--    <ice:commandButton-->
+<!--    	value="#{tuningManager.modeChange}"-->
+<!--    	type="submit"-->
+<!--    	id="modeChangeButtonStress"-->
+<!--    	actionListener="#{tuningManager.changeModeAction}"-->
+<!--    	>-->
+<!--    </ice:commandButton>-->
+    
+	    <ice:dataTable
+    		id="stress"
+    		rows = "#{tuningManager.size}"
+    		value="#{tuningManager.syllStressArray}"
+    		var="row"
+    		rendered="#{tuningManager.renderStressTable}"
+    		>
+    		
+    		<f:facet name="header">
+    			<ice:columnGroup>
+    			
+    				<ice:headerRow>
+    					<ice:column colspan="2">
+    						<ice:outputText value="#{userSettings.settings['phoneticTuning.Word']}"/>
+   						</ice:column>   						
+   						<ice:column colspan="2">
+   							<ice:outputText value="#{userSettings.settings['stressTuning.Syllables']}"/>
+   						</ice:column>
+    				</ice:headerRow>
+
+    			</ice:columnGroup>
+    		</f:facet>
+
+	    	<ice:column groupOn="#{row.word}">
+    			<ice:outputText value="#{row.word}"/>    			
+    		</ice:column>
+	  		<ice:column groupOn="#{row.word}">
+	    		<ice:selectBooleanCheckbox
+    				value="#{row.wordStress}"
+    				valueChangeListener="#{stressTuning.changeSelection}"
+    				>
+    				</ice:selectBooleanCheckbox>
+    		</ice:column>	    	
+    
+    		<ice:column>
+    			<ice:outputText value="#{row.syll}"/>
+    		</ice:column>
+	  		<ice:column>
+	    		<ice:selectBooleanCheckbox
+    				value="#{row.syllStress}"
+    				valueChangeListener="#{stressTuning.changeSelection}"
+    				>
+    				</ice:selectBooleanCheckbox>
+    		</ice:column>	    	
+<!--    		<ice:column id="listenStress">-->
+<!--				<f:facet name="header">-->
+<!--					<ice:outputText value="#{userSettings.settings['phoneticTuning.Listen']}"/>-->
+<!--				</f:facet>-->
+<!--				<ice:commandButton-->
+<!--					type="submit"-->
+<!--					value="#{userSettings.settings['phoneticTuning.Listen']}"-->
+<!--					actionListener="#{tuningManager.synthesizeAction}"-->
+<!--				/>			-->
+<!--			</ice:column>		-->
+  		</ice:dataTable>
+  		
+  					<ice:dataPaginator 
+		id="stressScroll"                  
+        for="stress" 
+        fastStep="3" 
+        paginator="true" 
+        paginatorMaxPages="4" 
+        >
+        <f:facet name="first">
+        	<ice:graphicImage 
+            	id="firstpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-first.gif"                                      
+                style="border:none;"
+                title="1"
+                />
+       	</f:facet>
+   		<f:facet name="last">
+        	<ice:graphicImage 
+            	id="lastpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-last.gif"
+                style="border:none;"
+                title="2"
+                />
+      	</f:facet>
+        <f:facet name="previous">
+        	<ice:graphicImage 
+            	id="previouspage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-previous.gif"
+                style="border:none;"
+                title="3"
+                />
+       	</f:facet>
+        <f:facet name="next">
+        	<ice:graphicImage 
+            	id="nextpage_1"
+                url="/xmlhttp/css/xp/css-images/arrow-next.gif"
+                style="border:none;"
+                title="4"/>
+       	</f:facet>
+        <f:facet name="fastforward">
+        	<ice:graphicImage 
+            	id="fastforward_1"
+                url="/xmlhttp/css/xp/css-images/arrow-ff.gif"
+                style="border:none;"
+                title="5"
+                />
+       	</f:facet>
+        <f:facet name="fastrewind">
+        	<ice:graphicImage 
+            	id="fastrewind_1"
+                url="/xmlhttp/css/xp/css-images/arrow-fr.gif"
+                style="border:none;"
+                title="6"/>
+        </f:facet>
+	</ice:dataPaginator>
+  		
+	   <ice:inputTextarea
+   		id="stressTuningEditor"
+		visible="#{tuningManager.renderStressEditor}"
+		rows="10"
+		cols="50"
+		value="#{tuningManager.stressEditor}"
+		>
+    </ice:inputTextarea>
+	</ice:panelGrid>
+</div>

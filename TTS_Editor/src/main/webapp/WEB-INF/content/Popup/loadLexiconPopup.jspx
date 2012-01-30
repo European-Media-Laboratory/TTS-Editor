@@ -1,0 +1,53 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup 
+		autoCentre="true" 
+		visible="#{popupManager.loadLexicon}" 
+		modal="true" 
+		rendered="#{popupManager.loadLexicon}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 200px;"
+		>
+    	<f:facet name="header">
+        	<ice:panelGrid 
+        		width="100%" 
+        		cellpadding="0" 
+        		cellspacing="0" 
+        		columns="2" 
+        		style="text-align: center;"
+        		>
+            	<ice:outputText style="color: #FFFFFF;" value="#{userSettings.settings['lexicon.load']}"/>
+                	<ice:commandButton 
+                		image="../img/cancel-small.png" 
+                		action="#{popupManager.closePopupAction}" 
+                		alt="close" 
+                		title="#{userSettings.settings['popup.close']}"
+                		/>
+            </ice:panelGrid>
+        </f:facet>
+                
+        <f:facet name="body">
+			<ice:panelGrid columns="3">
+				<ice:selectOneMenu
+					value="#{userSettings.settings['userSettings.LexiconListName']}"
+					id="lexiconSelection"
+					valueChangeListener="#{sessionManagement.lexiconSetting}"
+					>
+					<f:selectItems
+						value="#{userSettings.lexiconList}"
+					/>
+	    		</ice:selectOneMenu>
+	    		<ice:commandButton
+   					value="#{userSettings.settings['mainMenu.OpenLexicon']}"
+   					type="submit"
+   					id="openProject"
+   					actionListener="#{sessionManagement.openLexicon}"
+   					>
+	   			</ice:commandButton>
+		 	</ice:panelGrid>
+         </f:facet>      
+	</ice:panelPopup>  
+
+</div>

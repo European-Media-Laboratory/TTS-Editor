@@ -1,0 +1,13 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     	
+    <ice:panelGrid visible="#{helpManager.showAbout}" rendered="#{helpManager.showAbout}">
+
+		This is just some information on the EML TTS Editor Workplace, which has to be filled at some later point.
+			<br></br>
+		07. Mai 2010 MaMi
+
+	</ice:panelGrid>
+</div>

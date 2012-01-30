@@ -1,0 +1,33 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+    
+	<ice:outputMedia 
+		id="outputMedia" 
+	    player="flash" 
+	    standbyText="loading.."
+	    source="/media/player.swf"
+   	    rendered="true"
+   	    style="width:300px;height:150px;"
+	    >
+	    <!--	    style="width:300px;height:150px;"-->
+<!--	    <f:param-->
+<!--	    	name="style"-->
+<!--	    	value="#{player.style}"-->
+<!--	    />	                         -->
+	    <f:param 
+		   	name="allowfullscreen"
+            value="true"
+            />
+        <f:param 
+        	name="stretching"
+            value="none"
+            />
+		<f:param 
+			name="flashvars" 
+			value="#{player.flashvars}"
+			/>
+	</ice:outputMedia>
+</div>

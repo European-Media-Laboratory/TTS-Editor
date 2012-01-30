@@ -1,0 +1,94 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelGroup>
+		 
+		 <ice:panelCollapsible id="userInfo" expanded="true" >
+		 	<f:facet name="header">
+		 		<ice:panelGroup>
+		 			<ice:outputText value="#{userSettings.settings['userSettings.UserSettings']}"/>
+				</ice:panelGroup>
+		 	</f:facet>
+		 	<ice:panelGrid columns="2">
+	 			<ice:outputText value="#{userSettings.settings['userSettings.UserName']}"/>
+	 			<ice:inputText value="your name"/>
+	 			
+	 			<ice:outputText value="#{userSettings.settings['userSettings.userName']}"/>
+	 			<ice:inputText value="your login name"/>
+	 				 			
+	 			<ice:outputText value="#{userSettings.settings['userSettings.InteractionLanguage']}"/>
+	 			<ice:selectOneMenu 
+	 				value="lang"
+	 				valueChangeListener="#{userSettings.newLang}"
+	 				>
+
+    				<f:selectItem itemLabel="DE" itemValue="de"/>
+    				<f:selectItem itemLabel="EN" itemValue="en"/>
+    				
+   				</ice:selectOneMenu>
+		 	</ice:panelGrid>
+		 </ice:panelCollapsible>
+		 
+		 <ice:panelCollapsible 
+		 	id="lexInfo" 
+		 	expanded="true"
+		 	>
+		 	<f:facet name="header">-->
+		 		<ice:panelGroup>
+		 			<ice:outputText value="#{userSettings.settings['userSettings.LexiconSettings']}"/>
+		 		</ice:panelGroup>
+		 	</f:facet>
+			<ice:panelGrid columns="3">
+				<ice:selectOneMenu
+					value="#{userSettings.settings['userSettings.LexiconListName']}"
+					id="lexiconSelection"
+					valueChangeListener="#{sessionManagement.lexiconSetting}"
+					>
+					<f:selectItems
+						value="#{userSettings.lexiconList}"
+					/>
+	    		</ice:selectOneMenu>
+	    		<ice:commandButton
+   					value="#{userSettings.settings['mainMenu.OpenLexicon']}"
+   					type="submit"
+   					id="openProject"
+   					actionListener="#{sessionManagement.openLexicon}"
+   					>
+	   			</ice:commandButton>
+		 	</ice:panelGrid>
+		 </ice:panelCollapsible>
+		 		 
+ 		 <ice:panelCollapsible 
+		 	id="projectInfo" 
+		 	expanded="true"
+		 	>
+		 	<f:facet name="header">-->
+		 		<ice:panelGroup>
+		 			<ice:outputText value="#{userSettings.settings['userSettings.ProjectSettings']}"/>
+		 		</ice:panelGroup>
+		 	</f:facet>
+			<ice:panelGrid columns="3">
+				<ice:selectOneMenu
+					value="#{userSettings.settings['userSettings.ProjectListName']}"
+					id="projectSelection"
+					valueChangeListener="#{sessionManagement.projectSetting}"
+					>
+					<f:selectItems
+						value="#{userSettings.projectList}"
+					/>
+	    		</ice:selectOneMenu>
+	    		<ice:commandButton
+   					value="Remove Project"
+   					type="submit"
+   					id="removeProject"
+   					actionListener="#{sessionManagement.removeProject}"
+   					>
+	   			</ice:commandButton>
+		 	</ice:panelGrid>
+		 </ice:panelCollapsible>	 
+	</ice:panelGroup>
+
+</div>

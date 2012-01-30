@@ -1,0 +1,45 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup autoCentre="true" visible="#{popupManager.showConstraintWarning}" 
+		modal="true" rendered="#{popupManager.showConstraintWarning}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 200px;">
+		
+		<f:facet name="header">
+        	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" style="text-align: center;">
+            	<ice:outputText style="color: #FFFFFF;" value="#{userSettings.settings['error.Ups']}"/>
+                	<ice:commandButton image="../img/cancel-small.png" action="#{popupManager.closePopupAction}" alt="close" title="Close"/>
+            </ice:panelGrid>
+        </f:facet>
+	    <f:facet name="body">
+           	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" style="text-align: center;">
+			<ice:outputText style="font-size:10pt" value="#{userSettings.settings['constraints.warning']}"/>
+			<ice:outputText style="font-size:12pt" value="#{synthesize.currentContent}"/>
+			<br></br>
+			<ice:outputText style="font-size:10pt" value="#{userSettings.settings['constraints.optionsIntro']}"/>
+			<br></br>
+			<br></br>
+			<ice:outputText style="font-size:12pt" value="#{userSettings.settings['constraints.optionsManual']}"/>
+			<ice:outputText style="font-size:12pt" value="#{userSettings.settings['constraints.optionsAutomatic']}"/>
+			<br></br>
+			<ice:commandButton 
+				id="automaticOK" 
+				actionListener="#{synthesize.fitToConstraintAuto}" 
+				value="#{userSettings.settings['constraints.automaticOK']}" 
+				>
+			</ice:commandButton>
+			<ice:commandButton 
+				id="manualOK" 
+				action="#{popupManager.closePopupAction}" 
+				value="#{userSettings.settings['constraints.manualOK']}" 
+				>
+			</ice:commandButton>
+			</ice:panelGrid>
+		</f:facet>
+		
+	</ice:panelPopup>
+
+</div>

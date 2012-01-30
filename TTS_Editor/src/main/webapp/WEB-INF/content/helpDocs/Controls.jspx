@@ -1,0 +1,2019 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     	
+    <ice:panelGrid visible="#{helpManager.showControls}" rendered="#{helpManager.showControls}">
+<h1><a name="rif3">Loquendo TTS User Controls</a></h1>
+
+<div class="paragraph">Loquendo TTS allows the user to
+control certain aspects of the TTS reading, such as the language in which
+the text will be read, the voice, speaking rate, loudness, the interpretation of
+numbers, the stress prominence of a word and its pronunciation.</div>
+
+<div class="paragraph">Such controls can be applied by means of three different 
+approaches: </div>
+
+<ul class="list">
+  <li>software APIs</li>
+  <li>setting parameters in the system configuration files</li>
+  <li>inserting commands directly into the input text</li>
+</ul>
+
+<div class="paragraph">The first two methods are reserved
+for programmers, and enable the development of applications and GUIs 
+- such as those provided in the Loquendo TTS SDK - helping the user
+when preparing and tuning prompts.</div>
+
+<div class="paragraph">The third method is intended for
+anyone editing texts to be fed into the TTS system, and who wishes to fine-tune
+the speech synthesis output.</div>
+
+<div class="paragraph">Below we will
+describe this third kind of control, available to users of
+applications based on the Loquendo TTS proprietary interface. If the
+Speech API 4.0 or 5.1 interfaces are used, the commands must be given
+as described in the Microsoft SAPI documentation. Alternatively,
+Loquendo TTS behavior can be controlled by preparing the input text
+according to the SSML standard (Speech Synthesis Markup Language),
+described in Appendix A.</div>
+
+<div class="paragraph">Note that the application or GUI
+through which the user accesses Loquendo TTS may interfere with the
+nominal functioning of the User Controls, so please refer to the
+application manual for specific instructions. In particular, see the
+specific User Guides for the Loquendo TTS tools provided in the SDK,
+which are intended to help the user in applying text commands and to
+enhance control capabilities by means of API-based graphical
+interfaces. </div>
+
+<div class="paragraph"><b>Loquendo TTS User Controls</b> are a
+way of <i>marking-up</i> the text with commands that will be executed
+synchronously with the TTS conversion. They should be
+inserted in the input text, delimited by an initial backslash (\)
+and a final space. More than one command can be given in a single
+Control Sequence: in this case, only the final space is required and spaces inbetween commands may be omitted. The space acts as a delimiter of the Control Sequence, <i>unless it occurs within a string that is between parentheses.</i></div>
+
+<div class="paragraph">The general syntax of the Loquendo
+TTS User Controls is the following: </div>
+
+<div class="paragraph">
+<pre>&lt;Marked-up text&gt; ::= [&lt;text-portion 1&gt;] &lt;Control Sequence&gt; [&lt;text-portion 2&gt;]<br></br></pre>
+<pre>&lt;Control Sequence&gt; ::= &lt;Control&gt; [&lt;Control Sequence&gt;] &lt;white space&gt;<br></br></pre>
+<pre>&lt;Control&gt; ::= <b>\</b>&lt;control tag&gt; [&lt;parameters&gt;]<br></br></pre>
+<pre>&lt;white space&gt; ::= &lt;SPACE&gt;|&lt;TAB&gt;|&lt;RETURN&gt;|&lt;NEWLINE&gt;|&lt;FORMFEED&gt;<br></br></pre>
+<pre>&lt;control tag&gt; ::= &lt;string of characters&gt;&gt; ["="]<br></br></pre>
+<pre>&lt;parameters&gt; ::= <b>(</b>{[&lt;control tag&gt;]&lt;value&gt;}<b>)</b> | &lt;value&gt; [{<b>,</b>&lt;value&gt;}]<br></br></pre>
+<pre>&lt;value&gt; ::= &lt;string of characters&gt; | &lt;number&gt; | &lt;filename&gt;<br></br></pre>
+<pre>&lt;filename&gt; ::= [&lt;path&gt;] &lt;name&gt;<br></br></pre>
+<pre>&lt;path&gt; ::= [&lt;disk&gt;<b>:/</b>]{&lt;name&gt;<b>/</b>}<br></br></pre>
+<pre>&lt;name&gt; ::= &lt;string of characters&gt;<br></br></pre>
+</div>
+
+<br></br>
+<h3>Example:</h3>
+
+<div class="paragraph">
+<pre><i>This is </i>\speed=70\pitch=30 <i>a marked up text for</i> \spell=yes <i>LTTS.</i>
+</pre>
+<pre><i>Here</i> \audio(play=c:/sounds/my first beep.wav) <i>you will hear a beep.</i>
+</pre>
+</div>
+
+<div class="paragraph">The effect of a User Control can be
+<b><i>local</i></b>, e.g. the playing of a
+sound file or the spelling of the following word, or <b><i>global</i></b>,
+e.g. a language change or a raise in the voice pitch. In the second
+case the effect of the control remains until a new control cancels it.
+For a subset of the global parameters, their action scope is the single
+prompt fed to Loquendo TTS (which in turn can be a phrase, a paragraph
+or an entire text), at the end of which the parameters are reset to
+their default value.</div>
+
+<div class="paragraph">In the following paragraphs, the
+Loquendo TTS User Controls are described, grouping them according to
+their global or local effect.</div>
+
+<br></br>
+
+<h2><a name="rif31">Global controls</a></h2>
+
+<div class="paragraph">The family of Global Controls
+includes commands that change the value of some of the Reading
+Parameters of Loquendo TTS, affecting the quality of the output speech:
+</div>
+
+<ul class="list">
+
+  <li>Voice, Language and User Lexicons</li>
+  <li>Prosodic aspects of the voice (speaking rate, volume, voice pitch and 
+  		timbre)</li>
+  <li>Sound effects (reverb, balance)</li>
+  <li>Text interpretation (SSML vs. plain text, spelling vs. word pronunciation, 
+  		blanks read as pauses or not, number interpretation, automatic language 
+  		guessing)</li>
+</ul>
+
+<div class="paragraph">The change will take place at the
+moment when the word following the Control is being synthesized. The
+new value of the parameter will remain set until a new command changes
+it again (or, for the language, voice and prosody parameters, until the end
+of the prompt is reached). </div>
+
+<br></br>
+
+<h3><a name="rif311">Voice, language,&#160;lexicon, style and say-as</a></h3>
+
+<div class="paragraph"><b><i>Voice Control:</i></b>
+forces a voice switch between voices. The mnemonic must be the name
+of an installed voice (see <a href="chapter2.html#rif21">Languages
+and Voices</a>). At the end of the prompt the parameter is reset
+to its application default value.</div>
+
+<div class="paragraph"><b>\voice=</b>&lt;mnemonic&gt;</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre><b>\voice=</b>Susan hello. <b>\voice=</b>Dave hi. <br></br></pre>
+
+<pre>("hello" is read by the voice "Susan", then "hi" is read by the voice "Dave").<br></br></pre>
+
+</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Language Control:</i></b>
+forces a language switch between languages. The mnemonic must be the
+name of an installed language (see <a href="chapter2.html#rif21">Languages
+and Voices</a>). Aliases are accepted for the language name, from
+the generic name (e.g. <i>English</i>), to the standard
+ISO codes for languages and variants (e.g. <i>en-US, en-GB)</i>.
+At the end of the prompt the parameter is reset to its application
+default value. </div>
+
+<div class="paragraph"><b>\language=</b>&lt;mnemonic&gt;</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre><b>\language=</b>English Paris <b>\language=</b>French Paris. <br></br></pre>
+
+<pre>(the first occurrence of the word <i>Paris</i> will be pronounced: p"}rIs , and the second: paR"i).<br></br></pre>
+
+</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Lexicon Control:</i></b>
+loads and activates one or more User Lexicons, named &lt;lexicon
+filename&gt;. A User Lexicon can be
+loaded in the &lt;num&gt; position in the Lexicon Array (see
+User Control of TTS Pronunciation). Any position (number) can be chosen
+(although it is suggested that consecutive positions are used, starting
+from 0). If the specified position is already taken, the old lexicon assigned to that position
+will be substituted with the new one. Lexicons within a Lexicon Array are given an order of priority to allow for any conflicting commands which they may contain: lexicons assigned the highest number overide lexicons with a lower number.&#160; A loaded lexicon can be unloaded by referring to its &lt;num&gt; position in the
+Lexicon Array. The scope of the lexicon tag is the single prompt. <br></br>
+Loquendo TTS supports two formats of lexicon files: the Loquendo Format, and the W3C Pronunciation Lexicon Specification (PLS) version 1.0 (see <a href="http://www.w3.org/TR/pronunciation-lexicon/">http://www.w3.org/TR/pronunciation-lexicon/</a>). Use the Loquendo TTS Lexicon Manager tool to write and modify files in either format. 
+ </div>
+
+<div class="paragraph"><b>\lexicon(load=</b>&lt;num&gt;<b>,</b>&lt;lexicon
+filename&gt;<b>)</b> <br></br>
+<b>\lexicon(unload=</b>&lt;num&gt;<b>)</b>
+<br></br>
+<b></b><b><br></br>
+</b>
+</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>Assume you have two User Lexicons (created by means of Loquendo TTS Lexicon Manager):<br></br></pre>
+<pre> C:/tmp/first.lex<br></br>&#160;containing the following entries:<br></br>	"ez" = "exit zone"<br></br>	"o" = "open"<br></br></pre>
+<pre> C:/tmp/second.pls<br></br> containing the following entries:<br></br>	&lt;lexeme&gt;<br></br>		&lt;grapheme&gt;ez&lt;/grapheme&gt;<br></br>		&lt;alias&gt;easy&lt;/alias&gt;<br></br>	&lt;/lexeme&gt;
+
+	&lt;lexeme&gt;<br></br>		&lt;grapheme&gt;j4f&lt;/grapheme&gt;<br></br>		&lt;alias&gt;just for fun&lt;/alias&gt;<br></br>	&lt;/lexeme&gt;<br></br></pre>
+<br></br>
+<pre>The following text:<br></br></pre>
+<pre>\lexicon(load=0,c:/tmp/first.lex)\lexicon(load=1,c:/tmp/second.pls)<i>o ez j4f,</i></pre>
+
+<pre>\lexicon(unload=1) <i>o ez j4f.</i></pre>
+<br></br>
+<pre>will be read as:<br></br></pre>
+<pre>"open easy just for fun, open exit zone j 4 f."<br></br></pre>
+</div>
+<br></br>
+
+
+<div class="paragraph"><b><i>Style Control: </i></b>activates one of the
+alternative reading styles available. Reading styles modify TTS behaviour by setting
+reading parameters (see Text Interpretation) and by activating&#160;User
+Lexicons (several lexicons can be activated at a time, including
+regular expression lexicons&#160;.rex). Reading styles take the form of text files that can be
+created by the user (with the extension <span style="font-weight: bold;">.ycf</span>,
+in the Data directory). For some languages, Loquendo
+TTS provides a number of pre-defined styles, e.g. for SMS reading, address reading. Language-specific styles
+can be activated by direct reference to their filename, with the \style
+command (e.g. \style=SMSEnglishUs). Alternatively (see below), they can be set via their language-independent mnemonic by means of the \sayas command (e.g. \sayas=sms).&#160; At the end of the prompt, the previously set configuration, or the configuration defined by the application, is restored.  </div>
+
+<div class="paragraph">
+<div class="paragraph"><b>\style=</b>&lt;name&gt;&#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+
+&#160;&#160;&#160; activates the reading style corresponding to the file
+&lt;name&gt;.ycf<br></br>
+
+<div class="paragraph"><b>\style=reader &#160; &#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160; &#160;</b>restores the previously set, or application-defined,&#160;reading style<b><br></br>
+
+</b><b>\style=default&#160; &#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160; &#160;</b>restores the language-specific default reading style<br></br>
+
+<div class="paragraph">
+<div class="paragraph"><b>\style=general&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160; &#160;</b>restores the language-independent default reading style<br></br>
+
+</div>
+
+</div>
+
+<br></br>
+<div class="paragraph">
+<div class="paragraph"><b>
+
+Example:</b></div>
+
+<pre><br></br>Assume that your Data directory contains the <i>first</i> User Lexicon in the above example,<br></br>and the following style:<br></br></pre>
+
+<pre> C:/tmp/sample.ycf<br></br>	"lexicon" = "first.lex"<br></br>	"SpellPunctuation" = "YES"<br></br>	"DefaultNumberType" = "ordinalM"<br></br>&#160;</pre>
+
+<pre>The following text:<br></br><br></br>\style=sample 3 ez, o 7 door. \style=general 3 ez, o 7 door. <br></br><br></br><br></br></pre>
+
+<pre>will be read as:<br></br></pre>
+
+<pre>"third exit zone comma, open seventh door dot. three ez, o seven door."<br></br></pre>
+
+</div>
+
+<br></br>
+<div class="paragraph"><b><i><br></br>
+
+Say-as Control: </i></b>activates a
+reading style specified by a mnemonic (e.g. address, sms), if the
+corresponding pre-defined style is available for the current language
+(see above). At the end of the prompt the application-defined reading
+style is restored. </div>
+
+<b>\sayas=</b>&lt;mnemonic&gt;&#160;&#160; &#160;&#160;&#160;
+
+&#160;&#160; &#160;activates the reading style corresponding to the file
+&lt;mnemonic&gt;&lt;current language name&gt;.ycf<br></br>
+
+<b>\</b><b>sayas</b><b>=reader &#160; &#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;</b>restores the application-defined&#160;reading style<b><br></br>
+
+</b><b>\</b><b>sayas</b><b>=default&#160; &#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;</b>restores the language-specific default reading style<br></br>
+
+<div class="paragraph">
+<div class="paragraph"><b>\</b><b>sayas</b><b>=general&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;</b>restores the language-independent default reading style<br></br>
+
+<div class="paragraph">
+<div class="paragraph"><br></br>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre><b>\sayas=SMS </b>brb c u l8r, <b>\sayas=default </b>brb c u l8r. <br></br></pre>
+
+<pre>(if the current language is English, the text will be read as "be right back see you later, b r b c u l eight r").<br></br></pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<h3><a name="rif312">Prosodic controls</a></h3>
+
+<div class="paragraph">The following commands allow the
+quality of the output voice to be controlled by modifying its rhythm,
+intonation, volume and timbre. The output speech is modified from the
+word following the command, up until the end of the prompt. In the case of a
+voice change, the new prosodic values are also applied to the new
+voice. A new prompt, however, resets all the prosodic parameters to their default
+values.</div>
+
+<div class="paragraph">The prosodic parameters can be set to a given value, or increased or decreased with respect to
+their current value. The desired value can either be
+expressed in physical units
+(words per minute for speaking rate, Hertz or semitones for pitch and
+timbre, decibels for volume), or as a number on an abstract scale from 0-100, where 50
+corresponds to the default value of the parameter, and 0 and 100 to its
+minimum and maximum values respectively. This 0-100 scale can be
+modified by the application, so please refer to the application manual
+for specific instructions.</div>
+
+<div class="paragraph">Note that the relative changes
+are with respect to the <i>current</i> value and are cumulative: for example, two
+consecutive commands \pitch+20Hz within the same prompt will raise the
+pitch by 40Hz.</div>
+
+<div class="paragraph"><b>N.B.</b> Even if
+there are, in theory, no formal limitations to the assignable values (expressed in
+physical units), changes are limited by the physical
+range possible for the voice.</div>
+
+<div class="paragraph">The general syntax for Prosodic
+Controls is the following:</div>
+
+<div class="paragraph">
+<table>
+
+  <tbody>
+    <tr>
+    <td> <b>\&lt;tag&gt;=&lt;num&gt;</b>
+      </td>
+     <td> sets to &lt;num&gt; (abstract scale) </td>
+   </tr>
+   <tr>
+     <td> <b>\&lt;tag&gt;&#177;&lt;num&gt;</b>
+      </td>
+      <td> increases or decreases by &lt;num&gt; (abstract scale) </td>
+  </tr>
+    <tr>
+      <td>&#160;</td>
+      <td>&#160;</td>
+   </tr>
+   <tr>
+     <td> <b>\&lt;tag&gt;=&lt;num&gt;&lt;physical unit&gt;</b> </td>
+      <td> sets to &lt;num&gt; (in physical unit of measurement) </td>
+    </tr>
+    <tr>
+     <td> <b>\&lt;tag&gt;&#177;&lt;num&gt;&lt;physical unit&gt;</b> </td>
+      <td> increases or decreases by &lt;num&gt; (in physical unit of 
+      		measurement) </td>
+    </tr>
+   <tr>
+      <td> <b>\&lt;tag&gt;&#177;&lt;perc&gt;%</b>
+      </td>
+      <td> increases or decreases by &lt;perc&gt; percent
+of the current value </td>
+    </tr>
+    <tr>
+      <td>&#160;</td>
+      <td>&#160;</td>
+    </tr>
+   <tr>
+      <td> <b>\&lt;tag&gt;</b> </td>
+      <td> resets to the standard default value </td>
+  </tr>
+  </tbody>
+</table>
+
+</div>
+
+
+<div class="paragraph">In detail, the specific syntax for
+the four prosodic parameters is the following:</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Speed Control:</i></b>
+allows the speaking rate to be modified, expressed in an abstract scale
+0-100 or in words per minute (<b><i>wm</i></b>).
+<br></br>
+
+<br></br>
+
+<b>\speed=&lt;num&gt;</b> </div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed=60 (Scale 0-100)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\speed&#177;&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed+20 (Scale 0-100 variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\speed=&lt;num&gt;wm</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed=110wm (words per minute)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\speed&#177;&lt;num&gt;wm</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed-10wm (words per minute variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\speed&#177;&lt;perc&gt;%</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed+20% (percentage variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\speed</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\speed (reset)<br></br></pre>
+
+</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Pitch Control:</i></b>:
+allows the fundamental frequency (tone or pitch) to be modified,
+expressed in an abstract scale 0-100 or in Hertz (<b><i>hz</i></b>)
+or semitones (<b><i>st</i></b>).</div>
+
+<div class="paragraph"><b>\pitch=&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch=60 (Scale 0-100)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch&#177;&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch+20 (Scale 0-100 variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch=&lt;num&gt;hz</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch=200hz (Hertz)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch&#177;&lt;num&gt;hz</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch-40hz (Hertz variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch&#177;&lt;nsemit&gt;st</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch+2st (semitones variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch&#177;&lt;perc&gt;%</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch+30% (percentage variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\pitch</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\pitch (reset)<br></br></pre>
+
+</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Volume Control:</i></b>
+
+allows the volume (loudness) to be modified, expressed in an abstract
+scale 0-100 or in decibels (<b><i>dB</i></b>).</div>
+
+<div class="paragraph"><b>\volume=&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume=60 (Scale 0-100)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\volume&#177;&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume+20 (Scale 0-100 variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\volume=&lt;num&gt;db</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume=-3db (decibels)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\volume&#177;&lt;num&gt;db</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume+1db (decibel variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\volume&#177;&lt;perc&gt;%</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume+20% (percentage variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\volume</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\volume (reset)<br></br></pre>
+
+</div>
+
+<br></br>
+
+<div class="paragraph"><b><i>Timbre Control:</i></b>
+
+allows the voice timbre to be modified by a shift in frequency, expressed in an
+abstract scale 0-100 or in semitones (<b><i>st</i></b>).</div>
+
+<div class="paragraph"><b>\timbre
+=&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\timbre=60 (Scale 0-100)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\timbre&#177;&lt;num&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\timbre+20 (Scale 0-100 variation)<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b>\timbre</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\timbre (reset)<br></br></pre>
+
+</div>
+
+<br></br>
+
+<br></br>
+
+<h3><a name="rif313">Sound effects</a></h3>
+<div class="paragraph">The following commands create
+certain sound effects by acting on acoustic parameters of the speech output signal: reverb gives the impression
+of a large hall or church, while delay (or echo) repeats the audio signal at ever diminishing volume. If the Audio Destination device is stereo, the balance between the two loudspeakers can be
+adjusted, locating the voice source in a given position in space. Additional effects include several robotic-voice styles and the whispering effect, both of which can be applied to any voice in any language.
+</div>
+<div class="paragraph">These effects
+remain active until a contrary command cancels or modifies them, i.e. <b>they
+are NOT reset at the end of the prompt</b>.</div>
+<div class="paragraph">The syntax of the three controls is
+the following:</div>
+<div class="paragraph"><b><i>Reverb Effect:</i></b>
+
+creates reverb with an intensity of &lt;gain&gt; and a delay of
+&lt;delay&gt; milliseconds <br></br>
+<br></br>
+<b>\reverb=&lt;gain&gt;,&lt;delay&gt;</b></div>
+<div class="paragraph"><b>Example:</b></div>
+<div class="paragraph">
+
+<pre>\reverb=80,500 (0&lt;gain&lt;100, 0&lt;delay&lt;2000)<br></br></pre>
+<pre>\reverb=0,0 (removes the reverb effect)<br></br></pre>
+</div>
+<div class="paragraph"><b><i>Balance Control:</i></b>
+locates the voice source at &lt;num&gt; degrees with respect to
+the listener (&lt;num&gt; between -45 and 45), or on
+the right/front/left <br></br>
+
+<br></br>
+<b>\balance=&lt;num&gt;</b></div>
+<div class="paragraph"><b>Example:</b></div>
+<div class="paragraph">
+<pre>\balance=-30 (locates the voice source at -30 degrees)<br></br></pre>
+<pre>\balance=right (locates the voice source on the right)<br></br></pre>
+<pre>\balance=center (locates the voice source in a central position)<br></br></pre>
+<pre>\balance=left (locates the voice source on the left)<br></br></pre>
+</div>
+<div style="font-weight: bold;" class="paragraph"><span
+ style="font-style: italic;">Robot Control:</span><span
+ style="font-weight: normal;"> applies the robotization effect to the voice currently active in the system. There are 9 robots available: Robby, Gort, Twiki, Torg, Tobor, Ash,
+Hector, Max and Lynjx.</span><br></br>
+
+<br></br>
+<b>\robot=&lt;robotName&gt;</b>
+</div>
+<div class="paragraph"><b>Example:</b></div>
+<div class="paragraph">
+<pre>\robot=Max<br></br></pre>
+<pre>\robot (removes the robotization effect)<br></br></pre>
+</div>
+<div style="font-weight: bold;" class="paragraph"><span
+ style="font-style: italic;">Whisper effect:</span><span
+ style="font-weight: normal;"> applies the whisper effect to the voice currently active in the system. The possible values are: on, off.</span><br></br>
+
+</div>
+<div class="paragraph"><b>Example:</b></div>
+<div class="paragraph">
+<pre>\whisper=on</pre> (the effect is active)<br></br>
+<pre>\whisper=off</pre> (the effect is active)<br></br>
+</div>
+<br></br>
+<br></br>
+
+<h3><a name="rif314">Text interpretation</a></h3>
+
+<div class="paragraph">The following commands control certain
+general aspects of text interpretation: </div>
+
+<ul class="list">
+  <li>the decoding of the input character stream (OEM, ANSI,
+UNICODE, etc.) and the general text format (SSML vs plain text)</li>
+  <li>where to insert prosodic pauses in speech, corresponding to
+typographical, punctuation or syntactic features</li>
+  <li>how to interpret digit sequences, special characters and
+acronyms</li>
+  <li>how to choose the language appropriate to the text</li>
+  <li>which Phonetic Alphabet to use for the Phonetic Input and Output</li>
+
+</ul>
+
+<div class="paragraph">Such reading parameters can also be
+set in Configuration files or by the correct API's (see the Loquendo TTS
+Programmer's Guide). Here we describe how to adjust them synchronously
+with the text by means of a User Control embedded in the text.</div>
+
+<div class="paragraph">The general syntax for these User
+Controls is the following:</div>
+
+<div class="paragraph"><b>\@&lt;key&gt;=&lt;value&gt;</b></div>
+<div class="paragraph">where &lt;key&gt; is the
+name of the Reading Parameter to be changed and &lt;value&gt;
+
+is its chosen value.</div>
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\@DefaultNumberType=telephone (all numbers will be read as telephone numbers)<br></br></pre>
+
+</div>
+
+<div class="paragraph">Such User Controls remain active until a contrary command cancels or modifies them, i.e. <b>a parameter that has been
+changed with the \@ tag is NOT reset at the end of the prompt.</b></div>
+
+<div class="paragraph">Here is the complete list of the
+modifiable reading parameters:<br></br>
+
+</div>
+
+<h3><i>Text coding and format</i>
+</h3>
+<ul class="list">
+  <li><b>TextEncoding -</b> Use this parameter to
+change the input text coding. Possible values: &#160;</li>
+  <ul>
+    <li>"default"
+    </li>
+
+    <li>"AutoDetect" or "auto" or "AutoDetectCoding"
+    </li>
+    <li>"unicode" or "utf-16" or "utf16"
+    </li>
+    <li>"utf-8" or "utf8"
+    </li>
+    <li>"iso"
+    </li>
+    <li>"ansi" or "windows" or "windows-ansi"
+    </li>
+    <li>"oem" or "ms-dos"
+    </li>
+
+    <li>"iso-8859-1" or "iso-latin-1" or "us-ascii"
+    </li>
+    <li>"iso-8859-2" or "iso-latin-2" "iso-central-european" [polish language only]
+    </li>
+    <li>"iso-8859-7" or "iso-greek" [greek language only]
+    </li>
+    <li>"iso-8859-9" or "iso-turkish" [turkish language only]
+    </li>
+    <li>"windows-1250" or "windows-latin-2" or "windows-central-european" [polish 
+language only]
+    </li>
+    <li>"windows-1252" or "windows-latin-1" or "windows-western"
+    </li>
+
+    <li>"windows-1253" or "windows-greek" [greek language only]
+    </li>
+    <li>"windows-1254" or "windows-turkish" [turkish language only]</li>
+    <li>&#160;"autodetect" (default in
+case of input file), "ansi"&#160;or "windows" or "windows ansi"
+(default), "unicode"
+o</li>
+  </ul>
+  <li><b>TextFormat -</b> Use this parameter to
+change the input text format. Possible values are: "ssml", "plain"
+(default) or "autodetect". </li>
+
+</ul>
+
+<h3><i>Prosodic Pause Insertion</i>
+</h3>
+<ul class="list">
+  <li><b>MultiSpacePause -</b> By default, multiple
+spaces or tabs in a text generate a pause. If you set this parameter to
+"FALSE", no pause is generated. </li>
+  <li><b>MaxParPause -</b> By default, lines shorter than
+5 words (like titles or signatures) are automatically terminated by a
+pause. You can change this value from 5 to a different value; use "0"
+(zero) if you want to disable this feature </li>
+  <li><b>ProsodicPauses -</b> Three possible values:
+"automatic" (pauses are automatically inserted at phrase boundaries,
+e.g. at end of sentence, at commas, between subject and verb),
+"punctuation" (pauses are inserted only at punctuation marks), "word"
+(pauses are inserted at each word boundary, "word by word" reading)</li>
+
+  <li><b>ShortPauseLength -</b> Sets the duration (in
+milliseconds) of automatically inserted short pauses. The value "0"
+resets the pause duration to its default value (typically, 50&#160;ms) </li>
+  <li><b>MediumPauseLength -</b> Sets the duration
+(in milliseconds) of pauses inserted at commas. The value "0" resets
+the pause duration to its default value (typically, 120&#160;ms)</li>
+  <li><b>LongPauseLength -</b> Sets the duration (in
+milliseconds) of end-of-sentence pauses. The value "0" resets the pause
+duration to its default value (typically, 500&#160;ms) </li>
+
+</ul>
+
+<h3><i>Digit and symbol pronunciation</i></h3>
+<ul>
+  <li><b>SpellingLevel -</b> Three possible values:
+"normal", "spelling" (all words are spelled out), "pronounce" (no words
+are spelled out), "screenreader" (isolated characters are spelled out) </li>
+  <li><b>SpellPunctuation -</b> If you set this
+parameter to "TRUE", punctuation marks are read out, e.g. <b>:-]</b> "colon hyphen square bracket"</li>
+
+  <li><b>TaggedText -</b> If you set this parameter
+to "FALSE", control tags are not processed but pronounced</li>
+
+  <li><b>DefaultNumberType -</b> Defines the number
+type: &#8220;automatic&#8221; (by default, number type is
+detected automatically), &#8220;telephone&#8221;,
+&#8220;cardinal&#8221;,
+
+&#8220;code&#8221;, &#8220;time&#8221;,&#160;&#8220;ordinalM&#8221;, &#8220;ordinalF&#8221;</li>
+  <li><b>DateReadingMode</b> - Sets the reading mode for dates: "dmy", "mdy", 
+"ymd", "dm", "my", "d", "m", "y"
+  </li>
+  <li><b>TimeReadingMode</b> - Sets reading mode for time values as either "time" 
+(default) or "duration"
+  </li>
+
+  <li><b>CurrencyReadingMode</b> - Sets the reading mode for currencies: 
+"decimal" (e.g. "two point forty five dollars"), "short" (e.g. "two dollars and 
+forty five"), "extended" (e.g. "two dollars and forty five cents")</li>
+</ul>
+
+<h3><i>Language guessing</i> </h3>
+<ul class="list">
+  <li><b>AutoGuess -</b> Activates and configures the
+AutoGuess mode, i.e. the ability to automatically switch to the appropriate 
+language according to the text. The syntax of this configuration
+parameter is: <br></br>
+AutoGuess=[Type]:[Language list]. <br></br>
+
+Possible values for "type":
+    <ul class="list" type="circle">
+      <li>1.  "no" - no AutoGuess mode </li>
+      <li>2.  "VoiceParagraph" - Detects language and changes voice
+accordingly, paragraph by paragraph </li>
+      <li>3.  "VoiceSentence" - Detects language and changes voice
+accordingly, sentence by sentence </li>
+      <li>4.  "VoicePhrase" - Detects language and changes voice
+accordingly, phrase by phrase </li>
+      <li>5.  "LanguageParagraph" - Detects and changes language,
+paragraph by paragraph, without changing the active voice </li>
+
+      <li>6.  "LanguageSentence" - Detects and changes language,
+sentence by sentence, without changing the active voice </li>
+      <li>7.  "LanguagePhrase" - Detects and changes language, phrase
+by phrase, without changing the active voice </li>
+      <li>8.  "LanguageWord" - Detects and changes language, word by
+word, without changing the active voice </li>
+      <li>9.  "BothParagraphSentence" - Combines the effects of
+"VoiceParagraph" and "LanguageSentence" </li>
+      <li>10. "BothParagraphPhrase" - Combines the effects of
+"VoiceParagraph" and "LanguagePhrase" </li>
+      <li>11. "BothParagraphWord" - Combines the effects of
+"VoiceParagraph" and "LanguageWord" </li>
+
+      <li>12. "BothSentencePhrase" - Combines the effects of
+"VoiceSentence" and "LanguagePhrase" </li>
+      <li>13. "BothSentenceWord" - Combines the effects of
+"VoiceSentence" and "LanguageWord" </li>
+      <li>14. "BothPhraseWord" - Combines the effects of
+"VoicePhrase" and "LanguageWord"</li>
+    </ul>
+  </li>
+
+<div class="paragraph">The AutoGuess keyword requires a
+list of languages separated by commas (e.g. English, French, Spanish, German).
+The intended languages can also be specified by voice names (e.g.
+Simon, Juliette, Carmen). For AutoGuess types 9-14, the character '-' (minus) <i>after</i>
+
+the language (e.g. "Swedish-") means that voice changes are permitted, but not "language
+only" changes (see the second example below). The character '-' (minus) <i>before</i> the
+language means that only language changes are permitted (not voice
+changes). <br></br>
+Some examples: </div>
+<div class="paragraph">
+<pre>\@AutoGuess=VoiceSentence:Italian,English<br></br></pre>
+<pre> (<i>sentence by sentence</i> changes between Italian and English voices)<br></br></pre>
+<pre>\@AutoGuess=BothSentenceWord:French-,Spanish-,English<br></br></pre>
+
+<pre> (<i>sentence by sentence</i> detects the appropriate language, and changes voice accordingly. <br></br>In addition, when using non-English voices, English words are detected <br></br>and pronounced with the English phonetic rule set).<br></br></pre>
+</div>
+</ul>
+<ul class="list">
+  <li><b>LanguageSetForGuesser -</b> Defines the
+list of languages, separated by commas, from which the Language Guesser should guess (e.g. "English, French, Spanish, Italian")</li>
+</ul>
+
+<h3><i>Phonetic input</i> </h3>
+<ul class="list">
+  <li><b>SampaSecondAccent -</b>&#160;If you set
+this parameter to &#8220;YES&#8221;, the SAMPA secondary stress (the symbol % ) is converted
+to the SAMPA primary stress (the symbol " ). By default,
+the SAMPA secondary stress is simply ignored. (For more information on the SAMPA phonetic
+alphabet, see below). </li>
+</ul>
+
+<h3><i>Audio Mixer</i> </h3>
+<ul class="list">
+
+  <li><b>AudioTagScope - </b>If you set
+this parameter to &#8220;SinglePrompt&#8221;, the audio file you are mixing with speech (see <a href="chapter3.html#rif328">Audio mixer capabilities</a>) will be played till the end of the current prompt; otherwise, if it is set to &#8220;MultiplePrompt&#8221;, the audio file will be played over multiple prompts till the audio comes to an end, or, if the <i>loop command</i> is set, until you stop the audio track</li>
+</ul>
+The audio file format is detected automatically based on the file extension; the recognised extensions are:
+<ul class="list">
+	<li><b>.alaw</b> / <b>.alw</b> / <b>.al</b>: for 8 kHz, a-law, mono audio files</li>
+
+	<li><b>.ulaw</b> / <b>.ulw</b> / <b>.ul</b>: for 8 kHz, u-law, mono audio files</li>
+	<li><b>.wav</b>: for any frequency, a-law, u-law or linear encoding, and either mono or stereo audio files: the wave header will be analysed in order to extract the correct parameters.</li>
+</ul>
+For raw files of unknown extension it is possible to set the correct audio parameter by using the following user controls:  
+<ul class="list">
+
+	<li><b>MixerAudioFileDefaultFrequency - </b>sets the frequency of the audio file, which must be a value expressed in Hz (e.g. 44100) </li>
+	<li><b>MixerAudioFileDefaultEncoding - </b>sets the audio encoding as "linear", "alaw" or "ulaw" </li>
+	<li><b>MixerAudioFileDefaultChannels - </b>can be "mono" or "stereo" </li>
+</ul>
+<br></br>
+
+<h2><a name="rif32">Local controls</a></h2>
+
+<div class="paragraph">Local Controls force a particular reading mode
+at the exact point in the text where they are inserted,
+overriding the current values of any Reading Parameters which have been set. The effect is
+local, changing the pronunciation of the following word or text portion
+(say-as, stress, duration), or inserting a given event (a word or phrase
+represented in phonemes, a paralinguistic event, a sound mixed with the
+voice, a bookmark).</div>
+
+<div class="paragraph">The Local Controls can be grouped
+as follows: </div>
+
+<ul class="list">
+  <li>Interpretation - modifying the pronunciation of the following word
+(numbers, spelling, stress)</li>
+  <li>Pauses - inserting a pause of a given duration or imposing a
+given duration on the following pause</li>
+  <li>Phrase duration - imposing a given duration on the following
+delimited text portion</li>
+  <li>Special event - (insertion of a bookmark, playing
+of a demo sentence or of a sound file)</li>
+ <li>Phonetic Input - specifying the synthesis of words by their phonetic transcription</li>
+  <li>Audio Mixer - mixing the synthesized voice with sound files
+</li>
+
+</ul>
+
+<br></br>
+
+<h3><a name="rif321">Interpret</a></h3>
+
+<div class="paragraph">The&#160;<i>interpret</i>
+commands control the pronunciation of the following word (the string of
+characters up to the next blank or phrase terminator), governing number
+interpretation, spelling and stress. The functioning of these commands
+may differ from language to language. <br></br>
+
+<br></br>
+
+<b><i>Number interpretation</i></b> <br></br>
+
+<br></br>
+
+<table>
+
+  <tbody>
+
+    <tr valign="top">
+
+      <td> <b>\number=ordinalM</b> </td>
+
+      <td> (masculine) ordinal number, e.g. \number=ordinalM
+(English: <i>fourth</i>, Italian <i>quarto</i>)
+      </td>
+
+    </tr>
+
+    <tr valign="top">
+
+      <td> <b>\number=ordinalF</b> </td>
+      <td> feminine ordinal number, e.g. \number=ordinalM 4
+(Italian <i>quarta</i>) </td>
+    </tr>
+
+    <tr valign="top">
+      <td> <b>\number=cardinal</b> </td>
+
+      <td> cardinal number, e.g. \number=cardinal 254667 (<i>two
+hundred fifty four thousand six hundred sixty seven</i>) </td>
+
+    </tr>
+   <tr valign="top">
+      <td> <b>\number=code</b> </td>
+      <td> numerical code, e.g. \number=code 254 (read: <i>two
+five four</i>) </td>
+    </tr>
+    <tr valign="top">
+      <td> <b>\number=time</b> </td>
+      <td> time e.g. \number=time 10:24:45 (read: <i>ten
+twenty-four and forty five seconds</i>) </td>
+    </tr>
+    <tr valign="top">
+      <td> <b>\number=telephone&#160;&#160;&#160;</b>
+
+      </td>
+      <td> telephone number, e.g. \number=telephone 254667 <i>(two
+five four six six seven)</i> </td>
+    </tr>
+  </tbody>
+</table>
+
+<br></br>
+<br></br>
+
+<b><i>Spelling</i></b> <br></br>
+
+<br></br>
+
+<table>
+
+  <tbody>
+   <tr valign="top">
+      <td> <b>\spell=yes</b> </td>
+      <td> the following word is spelled out, e.g. \spell=yes but
+(<i>bee you tee</i>) </td>
+    </tr>
+
+    <tr valign="top">
+      <td> <b>\spell=no</b> </td>
+      <td> the following word is not spelled out, e.g. \spell=no
+IBM (<i>ibm</i>) </td>
+    </tr>
+    <tr valign="top">
+      <td> <b>\spell=auto&#160;&#160;&#160;</b>
+
+      </td>
+      <td> default behavior, e.g. \spell=auto but \spell=auto IBM
+(<i>but</i> <i>i bee em</i>) </td>
+    </tr>
+  </tbody>
+</table>
+
+<br></br>
+
+<br></br>
+
+<b><i>Stress</i></b> <br></br>
+
+<br></br>
+
+<table>
+ <tbody>
+    <tr valign="top">
+      <td> <b>\stress=yes</b> </td>
+     <td> the following word is stressed, e.g. \stress=yes da
+casa (Italian: <i>d&#224; c&#224;sa</i>) </td>
+    </tr>
+   <tr valign="top">
+     <td> <b>\stress=no</b> </td>
+     <td> the following word is de-accented, e.g. da \stress=no
+casa (Italian: <i>da casa</i>) </td>
+   </tr>
+    <tr valign="top">
+      <td> <b>\stress=auto&#160;&#160;&#160;</b>
+      </td>
+      <td> default behavior, e.g. \stress=auto da \stress=auto
+casa (Italian: <i>da c&#224;sa</i>) </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<br></br>
+
+<h3><a name="rif322">Pause</a></h3>
+
+<div class="paragraph">The pause commands can be used to modify
+ the duration of pauses corresponding to punctuation marks
+, or to insert pauses when punctuation is lacking. Note that the presence of a pause
+always modifies the intonation of the preceding phrase. <br></br>The resulting
+intonation depends on the punctuation mark: </div>
+<div>&#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; <b> , ( ) - </b> &#160; &#160; produce a continuation or suspensive intonation</div>
+
+<div>&#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; <b>&#160;&#160;?  </b> &#160;&#160; &#160;&#160;&#160; produces a an interrogative intonation</div>
+<div>&#160;&#160;&#160; &#160;&#160;&#160;
+
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; <b>. ; ! </b> &#160;&#160; &#160;&#160; produce a conclusive intonation</div>
+<br></br>
+
+<div class="paragraph"><b><i>Pause insertion</i></b>
+<br></br>
+
+Inserts a pause (silence) in absence of punctuation marks. No effect if
+punctuation is present.</div>
+
+<table>
+ <tbody>
+    <tr valign="top">
+      <td> <b>\pause</b> </td>
+      <td> inserts a medium-length pause (120&#160;ms), preceded by a
+&#8216;comma intonation&#8217; </td>
+    </tr>
+   <tr valign="top">
+      <td> <b>\pause,</b> </td>
+     <td> inserts a medium-length pause (120&#160;ms), preceded by a
+
+&#8216;comma intonation&#8217; </td>
+    </tr>
+   <tr valign="top">
+      <td> <b>\pause.</b> </td>
+      <td> inserts a long pause (500ms), preceded by a
+&#8216;conclusive intonation&#8217; </td>
+    </tr>
+   <tr valign="top">
+      <td> <b>\pause?&#160;&#160;&#160;</b>
+      </td>
+      <td> inserts a long pause (500ms), preceded by a
+&#8216;question intonation&#8217; </td>
+    </tr>
+  </tbody>
+</table>
+
+<br></br>
+
+<br></br>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>Here \pause is a comma pause. (inserts a 120ms &#8216;comma intonation&#8217; pause between "Here" and "is")<br></br></pre>
+
+<pre>Here \pause, is a comma pause. (leaves unaltered the &#8216;comma pause&#8217; between "Here" and "is")<br></br></pre>
+
+<pre>Here \pause. is a conclusive pause. (inserts a 500ms &#8216;conclusion&#8217; pause between "Here" and "is")<br></br></pre>
+
+<pre>Here \pause? is a question pause. (inserts a 500ms &#8216;question&#8217; pause between "Here" and "is")<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b><i>Pause duration</i></b>
+<br></br>
+When followed by a punctuation mark, forces the duration of the
+corresponding pause to &lt;num&gt; milliseconds. In the absence of
+punctuation, inserts a &#8216;comma intonation&#8217; pause of
+
+&lt;num&gt; milliseconds. </div>
+<div class="paragraph"> <b>\pause=&lt;num&gt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+
+sets to &lt;num&gt; milliseconds the duration of the following
+pause</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>This \pause=10 , is a comma pause. (reduces to 10ms the following &#8216;comma intonation&#8217; pause)<br></br></pre>
+
+<pre>This \pause=10, is a comma pause. (reduces to 10ms the following &#8216;comma intonation&#8217; pause)<br></br></pre>
+
+<pre>This \pause=10 is a comma pause. (inserts a 10ms &#8216;comma intonation&#8217; pause)<br></br></pre>
+
+<pre>No final pause \pause=0. (reduces the final silence to a minimum duration, while keeping the conclusive intonation)<br></br></pre>
+
+</div>
+
+<br></br>
+
+<h3><a name="rif323">Phrase duration</a></h3>
+
+<div class="paragraph">Forces the subsequent text to be synthesized in
+&lt;msec&gt; milliseconds. The text should be preceded by the tag <b>\duration(start,value=<msec/>)</b> and followed
+by a final tag <b>\duration(end)</b>. The delimited text should <b>not</b>
+include punctuation marks. The forced duration should be realistic (at
+least 30% of the normal speaking time), otherwise there will be no
+effect. <br></br>
+
+<br></br>
+</div>
+<div class="paragraph"> <b>\duration(start,value=&lt;msec&gt;</b>)&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; forces the duration of the phrase to &lt;msec&gt; milliseconds, 
+up to the tag \duration(end) <br></br>
+<b>\duration(end)&#160;&#160;&#160; &#160;&#160;&#160;
+
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160;
+&#160;&#160;&#160; &#160;&#160;&#160; </b>delimits the phrase for which the duration is forced</div>
+<div class="paragraph"><b>Example:</b></div>
+<div class="paragraph">
+<pre>Standard reading.<br></br><b>\duration(start,value</b><b>=</b>500) Fast reading <b>\duration(end)</b> .<br></br><b>\duration(start,value=</b>1000) Slow reading <b>\duration(end)</b> .<br></br></pre>
+
+</div>
+<br></br>
+<br></br>
+
+<h3><a name="rif324">Special events</a></h3>
+
+<div class="paragraph">These commands trigger particular
+events (the playing of a sound or demo sentence, the signaling to the application that a
+bookmark has been reached) at the moment when the synthesis output
+reaches the exact point in the text where they have been inserted.</div>
+
+<div class="paragraph"><b><i>Play sound</i></b>
+<br></br>
+
+Plays one of the paralinguistic sounds recorded for the voice in use.
+The names of the available sounds can be found in the SDK prompt
+editing tool or in the Voice Package. For most voices, the
+following sounds at least are available: Cough, Cry, Eh, Kiss, Laugh, Mmm, Oh,
+Sniff, Swallow, Throat, Whistle, Yawn. <br></br>
+
+<br></br>
+<b>\item=&lt;sound name&gt;</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\item=Laugh<br></br></pre>
+
+</div>
+
+<div class="paragraph"><b><i>Play demo sentence</i></b>
+<br></br>
+
+Plays a predefined sentence in the mother tongue of the current Voice.
+Allows any voice to be tested without having to insert an input text.
+The active language should be the mother tongue of the voice. This
+control cannot be mixed with other text in the same prompt. </div>
+
+<div class="paragraph"> <b>\demosentence</b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+synthesizes the standard sentence predefined for the voice in use</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\demosentence . (if the voice is Simon, the following sentence will be played:<br></br></pre>
+
+<pre><i>"My name is Simon. I am one of the Loquendo male voices and my mother tongue is British English")</i>
+</pre>
+
+</div>
+
+<div class="paragraph"><b><i>Bookmark</i></b>
+<br></br>
+
+When the TTS engine encounters the bookmark, it notifies the
+application by calling the user callback and signaling that the
+bookmark has been reached. <br></br>
+
+N.B. <i>Not all Audio Destinations/devices allow bookmarks.</i> <br></br>
+
+<br></br>
+
+<b>\book=&lt;string&gt;</b> </div>
+
+<br></br>
+
+<h3><a name="rif325">Phonetic input</a></h3>
+
+<div class="paragraph">These commands allow the user to write a word or phrase phonetically rather than graphemically. In case the usual written form of a word or phrase does not produce the desired pronunciation, the user can
+insert it phonetically, selecting the appropriate phonemes to achieve the desired pronunciation.</div>
+
+<div class="paragraph">The phonemes can be represented
+using the standard SAMPA alphabet, in its X-SAMPA extension
+(see <a href="http://www.phon.ucl.ac.uk/home/sampa/">http://www.phon.ucl.ac.uk/home/sampa/</a>), or by using the International Phonetic Alphabet (see <a href="http://www.langsci.ucl.ac.uk/ipa/">http://www.langsci.ucl.ac.uk/ipa/</a>).<font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;" lang="EN-US"><a title="http://www.phon.ucl.ac.uk/home/sampa/index.html" href="http://www.phon.ucl.ac.uk/home/sampa/index.html"><span title="http://www.phon.ucl.ac.uk/home/sampa/index.html" lang="IT"></span></a></span></font><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;"></span></font>
+<p class="MsoNormal"><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">&#160;</span></font>The interpretation of phonetic transcriptions by Loquendo TTS is, in principle, language-independent, thanks to the
+Phonetic Mapping feature (see <a href="chapter2.html#rif21">Languages and Voices</a>).
+Their acoustic rendering, however, depends on the phonemes available for that voice.</p>
+
+</div>
+
+<div class="paragraph">The syntax of the Phonetic Input
+command is the following:</div>
+<div class="paragraph"><b><i>SAMPA</i></b>
+<br></br>
+Enables the insertion of a phonetic transcription expressed in the SAMPA
+(X-SAMPA) alphabet.</div>
+<div class="paragraph">The phonetic transcription <b>&lt;phonemes&gt;</b>
+should be a string of X-SAMPA phonemes, representing a single word or a
+short phrase. The character "#" can be used as a word separator, while
+"$" can be used as a syllable separator. <br></br>
+<br></br>
+<b>\sampa(&lt;phonemes&gt;)</b><br></br>
+
+</div>
+<div class="paragraph"><b>Example:</b>
+</div>
+<div class="paragraph">
+<pre>\sampa(%le#"gRa~Z) (<i>Les Granges</i> in French)</pre>
+</div>
+<div style="text-align: justify;">The older variants
+of the SAMPA alphabet, which are language-dependent, are also accepted if the &lt;variant&gt;
+parameter is specified, where &lt;variant&gt; can be "ucl" or
+"teleatlas" or "navteq" (or "x-sampa" for the default variant). A &lt;language&gt; parameter can also be
+specified. For example, the value &lt;en-us&gt; forces the interpretation of
+the symbols "e" and "o" as diphthongs, while the value "spanish" allows
+the interpretation of the symbol "Y".<br></br>
+
+</div>
+<b><br></br>
+</b><b>\sampa=&lt;variant&gt;;(&lt;phonemes&gt;)<br></br>
+</b><b>\sampa=&lt;variant&gt;;&lt;language&gt;;(&lt;phonemes&gt;)</b><br></br>
+<b><br></br>
+
+Example:</b><br></br>
+<div class="paragraph">
+<pre>\sampa=x-sampa;("p_hleIs)(<i>place</i> in English) equivalent to: \sampa("p_hleIs)<br></br><br></br>\sampa=ucl;("pleIs) (<i>place</i> in English)<br></br><br></br>\sampa=teleatlas;("pleIs) (<i>place</i> in English)<br></br><br></br>\sampa=navteq;en-us;("ples) (<i>place</i> in English)</pre>
+
+</div>
+<br></br>
+
+<div class="paragraph"><b><i>IPA</i></b>
+<br></br>
+Allows the insertion of a phonetic transcription expressed in the IPA alphabet.
+</div>
+<div class="paragraph">The phonetic transcription <b>&lt;phonemes&gt;</b>
+should be a string of IPA phonemes that can be written in unicode or, if the document or the application do not support the unicode encoding, by using the character entities. <br></br>
+<br></br>
+<b>\ipa(&lt;phonemes&gt;)</b><br></br>
+
+</div>
+<div class="paragraph"><b>Example:</b>
+</div>
+<div class="paragraph">
+<p style="font-family: Lucida Sans Unicode; monospace" >
+\ipa(le gʀˈɑ̃ʒ) (<i>Les Granges</i> in French)
+</p>
+or, with the character entities:
+<pre>\ipa(le g&amp;#640;&amp;#712;&amp;#593;&amp;#771;&amp;#658;) (<i>Les Granges</i> in French)</pre>
+
+</div>
+<br></br><br></br>
+
+<h3><a name="rif327">Dynamic range control</a></h3>
+
+<div class="paragraph">The <i>Dynamic Range Control</i>
+applies compression and compensation gain to the waveform, thus
+enhancing the synthetic speech output. The feature is useful, for example, in improving comprehension in noisy environments. Seven presets with different
+degrees of compression can be selected through this user control, starting
+from <i>built-in(1)</i> that provides the least compression, to <i>built-in(7)</i>
+with maximum compression. The first five presets tend to keep the
+signal within the available range, while the last two presets may produce 
+saturation and, for this reason, should be used only in particular
+contexts where, for instance, background noise is very high.
+</div>
+
+<div class="paragraph">The syntax of the Dynamic Range
+Control is the following: <br></br>
+
+<b>\dynamic=</b>&lt;built-in curve&gt;
+</div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\dynamic=built-in(1)</pre>
+
+In this way the DRC <i>static curve one</i> is selected, activating the first preset of the dynamic range control.
+</div>
+
+<div class="paragraph">
+<pre>\dynamic</pre>
+
+This command is used to reset and disable the dynamic range controller.</div>
+
+<br></br>
+
+<h3><a name="rif328">Audio mixer features</a></h3>
+
+<div class="paragraph">The <i>audio mixer</i>
+allows synthetic speech to be mixed with sound files. It's possible to mix one or more
+sound files <b>simultaneously</b>. Every
+sound file (audio source) is treated as an independent audio track,
+with independent volume, timeline and sampling rate. <br></br>
+The sampling rate frequency of the audio sources is automatically
+converted according to the voice frequency used. The <i>audio
+mixer</i> supports 16 bit sound files, both mono and stereo, with
+arbitrary sampling rate frequency. <br></br>
+
+". wav" files are supported and played. <br></br>
+".mp3" files can't be played but can be generated by using a tool (like Loquendo TTS Director); it is only necessary to specify the correct file extension (.mp3).
+ ".wma", ".asf", ".ogg", ".avi", ".mpg" are <b>not</b> supported and are <b>not</b> played. <br></br>
+
+". raw" , ".pcm" and any other extension files are played as raw files.
+</div>
+
+<div class="paragraph">The syntax of the Audio Mixer
+control is the following: <br></br>
+
+<b>\audio(command[;command...])</b></div>
+
+<div class="paragraph"><b>Example:</b></div>
+
+<div class="paragraph">
+<pre>\audio(play=beep.wav)<br></br></pre>
+
+</div>
+
+<div class="paragraph">One or more commands can be given in
+a single control. The available commands are described below:</div>
+
+<br></br>
+
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+
+Command <b>play</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+
+\audio(play=&lt;filename&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+
+This command allows the playing of an audio file at the specified position
+in the text. <br></br>
+The filename can contain a forward slash ( / ) in order to specify the full path, but backslashes are not permitted, i.e.
+the syntax must be UNIX like, regardless of the operating system. <br></br>
+
+The &lt;filename&gt; can also be a URL.<br></br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Example 1:</i> <br></br>
+
+This is \audio(play=music.wav) a test. <br></br>
+      <br></br>
+      <i>Result:</i> <br></br>
+
+"This is" will be read, then the music.wav will be played, then "a
+test" will be read. <br></br>
+      <br></br>
+      <br></br>
+     <i>Example 2:</i> <br></br>
+
+This is \audio(play=music.wav;volume=50) a test. <br></br>
+      <br></br>
+     <i>Result:</i> <br></br>
+
+"This is" will be read, then music.wav will be played at volume
+50% (see <a href="#rifVolume">volume</a> command
+below), then "a test" will be read. <br></br>
+     <br></br>
+      <br></br>
+      <i>Example 3:</i> <br></br>
+
+This is \audio(play=music1.wav;play=music2.wav) a test. <br></br>
+      <i>Can also be written:</i> <br></br>
+
+This is \audio(play=music1.wav) \audio(play=music2.wav) a test. <br></br>
+      <br></br>
+      <i>Result:</i> <br></br>
+
+"This is" will be read, then music1.wav will be played, then
+music2.wav will be played, finally "a test" will be read.<br></br>
+      </td>
+   </tr>
+  </tbody>
+</table>
+
+<br></br>
+
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+
+Command <b>mix</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+
+\audio(mix=&lt;filename&gt;) <i>or</i><br></br>
+
+\audio(mix=&lt;filename&gt;,loop) <i>or</i><br></br>
+
+\audio(mix=&lt;filename&gt;,&lt;count&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+
+This command allows an audio file to be played at the specified position
+in the text.<br></br>
+
+The filename can contain a forward slash ( / ) in order to specify the full path, but backslashes are not permitted, i.e.
+the syntax must be UNIX like, regardless of the operating system. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Example 1:</i><br></br>
+
+This is \audio(mix=music.wav) a test.<br></br>
+     <br></br>
+     <i>Result:</i><br></br>
+
+Speech and music.wav will be mixed and heard together. The current track is
+music.wav (see the <a href="#rifTrack"><i>track</i></a>
+command below for details).<br></br>
+      <br></br>
+      <br></br>
+      <i>Example 2:</i><br></br>
+
+This is \audio(mix=music.wav,loop) a long test.<br></br>
+     <br></br>
+     <i>Result:</i><br></br>
+
+
+Speech and music.wav will be mixed and heard together. If the end of the audio
+file is reached, it will restart from the beginning. The current track
+is music.wav (see the <a href="#rifTrack"><i>track</i></a>
+
+command below for details).<br></br>
+     <br></br>
+     <br></br>
+     <i>Example 3:</i><br></br>
+
+This is \audio(mix=music.wav,3) a long test.<br></br>
+      <br></br>
+     <i>Result:</i><br></br>
+
+Speech and music.wav will be mixed and together. If the end of the audio
+file is reached, it will restart from the beginning 3 times. The
+current track is music.wav (see the <a href="#rifTrack"><i>track</i></a>
+command below for details).<br></br>
+     <br></br>
+
+Note:<br></br>
+
+\audio(mix=music.wav) and \audio(mix=music.wav,1) are equivalent. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="2" valign="top"> <br></br>
+Command <b>name</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(name=&lt;track name&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+
+This command allows a mnemonic name to be assigned to the current track. For convenience, this
+mnemonic name can be used in the <a href="#rifTrack"><b>track</b></a>
+
+command in place of the file name. </td>
+    </tr>
+  </tbody>
+<br></br>
+
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+     <td rowspan="3" valign="top"> <br></br>
+
+Command <b>volume</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+
+\audio(volume=&lt;range(0-200)&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows the volume of the current audio track to be set. To
+specify the current track use the <a href="#rifTrack"><i>track</i></a>
+command.<br></br>
+Default volume is 100%. The range values are percentages of the default
+volume. </td>
+   </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example 1:</i><br></br>
+This is \audio(mix=music.wav) \audio(volume=50) a test.<br></br>
+      <br></br>
+      <i>Result:</i><br></br>
+The volume of the audio file is set to 50% (from the start).<br></br>
+      <br></br>
+      <br></br>
+      <i>Example 2:</i><br></br>
+This is \audio(mix=music.wav) a test. Now I set the volume
+\audio(volume=50) to 50%.<br></br>
+      <br></br>
+      <i>Result:</i><br></br>
+The audio file volume starts at 100%, then is set to 50% after a brief period. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>pause</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(pause[=filename]) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows the current audio track to be paused. To specify the
+current track use the <a href="#rifTrack"><i>track</i></a>
+command. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example 1:</i><br></br>
+\audio(mix=music.wav) Music mixing \audio(pause) is now in pause.<br></br>
+      <br></br>
+      <i>Result:</i><br></br>
+The audio file is paused before the words "is now in pause".<br></br>
+      <br></br>
+      <br></br>
+     <i>Example 2:</i><br></br>
+\audio(mix=music1.wav;mix=music2.wav) Music mixing
+\audio(pause=music1.wav) is now in pause.<br></br>
+The current track is now music1.wav. </td>
+   </tr>
+ </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>resume</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(resume[=filename]) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows the current audio track to be resumed. To specify the
+current track use the <a href="#rifTrack"><i>track</i></a>
+command.<br></br>
+If the track is not in <a href="chapter3.html#rifPause">pause</a>
+it has no effect. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Example 1:</i><br></br>
+\audio(mix=music.wav) Audio mixing \audio(pause) is now in pause.
+\audio(resume) Audio mixing has been restarted.<br></br>
+      <br></br>
+      <i>Result:</i><br></br>
+Audio mixing is suspended before the words "is now in pause", then restarts.<br></br>
+      <br></br>
+     <br></br>
+      <i>Example 2:</i><br></br>
+\audio(mix=music1.wav;mix=music2.wav;mix=music3.wav) Audio mixing
+\audio(pause=music1.wav;pause=music2.wav) is now in pause.
+\audio(resume=music2.wav) Audio mixing restarts.<br></br>
+The current track is now music2.wav. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>pauseall</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(pauseall) </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+     <i>Description:</i><br></br>
+This command allows all the audio tracks to be paused. It is possible to
+resume audio tracks which have been paused by using the <i>resume</i> command,
+or the <i>resumeall</i> command. </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+     <i>Example:</i><br></br>
+\audio(mix=music1.wav) \audio(mix=music2.wav) This is a test using
+\audio(pauseall) the mixing feature.<br></br>
+      <br></br>
+      <i>(equivalent)</i><br></br>
+     <br></br>
+\audio(mix=music1.wav;mix=music2.wav) This is a test using
+\audio(pauseall) the mixing feature.<br></br>
+      <br></br>
+     <i>Result:</i> <br></br>
+
+The command will stop both the audio files. </td>
+    </tr>
+  </tbody>
+
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+   <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>resumeall</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(resumeall) </td>
+    </tr>
+   <tr>
+      <td valign="top"> <br></br>
+     <i>Description:</i><br></br>
+This command allows all the paused audio tracks to be resumed. </td>
+    </tr>
+   <tr>
+      <td valign="top"> <br></br>
+      <i>Example:</i><br></br>
+\audio(mix=music1.wav)\audio(mix=music2.wav) Audio mixing
+\audio(pauseall) is now in pause. \audio(resumeall) Audio mixing has been restarted.<br></br>
+      <br></br>
+     <i>Result:</i><br></br>
+The mixing is suspended before the words "is now in pause", then resumes. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>stop</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(stop[=filename]) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows the last audio track to be stopped. To specify the
+current track use the <a href="#rifTrack"><i>track</i></a>
+command.<br></br>
+It is not possible to resume an audio track using the <i>resume</i>
+command, after a <i>stop</i> command. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Example 1:</i><br></br>
+\audio(mix=music.wav) The music mixer \audio(stop) has now been stopped.<br></br>
+      <br></br>
+      <i>Example 2:</i><br></br>
+\audio(mix=music1.wav;mix=music2.wav) This is a test.
+\audio(stop=music1.wav) music1 has now stopped. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>stopall</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(stopall) </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows all the audio tracks to be stopped. It is not possible
+to resume an audio track using the <i>resume</i> command,
+after a <i>stopall</i> command. </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+     <i>Example:</i><br></br>
+\audio(mix=music1.wav) \audio(mix=music2.wav) This is a test using
+\audio(stopall) the mixing feature.<br></br>
+      <br></br>
+      <i>(equivalent)</i><br></br>
+      <br></br>
+\audio(mix=music1.wav;mix=music2.wav) This is a test using
+\audio(stopall) the mixing feature.<br></br>
+      <br></br>
+      <i>Result:</i> <br></br>
+The command will stop both the audio files. </td>
+    </tr>
+  </tbody>
+
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+ <tbody>
+    <tr>
+     <td rowspan="3" valign="top"> <br></br>
+Command <b>path</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(path=&lt;path&gt;) </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows a common path to be specified where the audio files are
+stored. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example:</i><br></br>
+\audio(path=c:/signals) \audio(mix=music1.wav) This is a test.
+\audio(mix=music2.wav) Hello world. \audio(path=c:/oldsignals)
+\audio(play=music3.wav) .<br></br>
+      <br></br>
+      <i>(equivalent)</i><br></br>
+     <br></br>
+\audio(path=c:/signals;mix=music1.wav) This is a test.
+\audio(mix=music2.wav) Hello world.
+\audio(path=c:/oldsignals;play=music3.wav) .<br></br>
+      <br></br>
+      <i>Result:</i><br></br>
+The file music1.wav and music2.wav will be searched in the local folder
+c:\signals.<br></br>
+The file music3.wav will be searched in the local folder c:\oldsignals.
+      </td>
+    </tr>
+  </tbody>
+
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>track</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(track=&lt;filename.wav&gt;) </td>
+    </tr>
+    <tr>
+     <td valign="top"> <br></br>
+     <i>Description:</i><br></br>
+This command specifies which track is treated as the current
+track. </td>
+   </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Example:</i><br></br>
+\audio(mix=music1.wav) The current track is music1.wav.<br></br>
+\audio(mix=music2.wav) Now the current track is music2.wav.<br></br>
+\audio(track=music1.wav;pause) The "pause" command refers to the
+music1.wav track.<br></br>
+Now the current track is music1.wav.<br></br>
+\audio(track=music2.wav;volume=50) The volume of music2.wav is set to
+50%. Now the current track is music2.wav<br></br>
+      <br></br>
+      <i>Note:</i><br></br>
+If the current track ends or is stopped, a new current track would be
+selected from the active ones, using the <i>track</i>
+command. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>mix2play</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(mix2play[=filename]) </td>
+    </tr>
+   <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command switches the current track from mix mode to play mode. It
+is useful for concluding the playing of a file of unknown duration. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example 1:</i><br></br>
+\audio(mix=music.wav) The audio file is mixed with this sentence.
+\audio(mix2play) This sentence will be read after the end of music.wav<br></br>
+      <br></br>
+      <i>Example 2:</i><br></br>
+\audio(mix=music.wav,loop) The audio file is mixed with this sentence.
+\audio(mix2play) This sentence will be read after the end of music.wav.
+The 'loop' directive in the mixing command is ignored by mix2play. </td>
+    </tr>
+  </tbody>
+</table>
+
+<br></br>
+
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>fadein</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(fadein=&lt;msec&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Description:</i><br></br>
+This command enables a 'fade in' effect to be set for the current track.
+To specify the current track, use the <i>track</i> command.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example:</i><br></br>
+\audio(mix=music.wav) \audio(fadein=500) The audio file is mixed with
+this sentence and then faded. </td>
+    </tr>
+  </tbody>
+
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>fadeout</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(fadeout=&lt;msec&gt;) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command allows a 'fade out' effect to be set for the current track.
+To specify the current track, use the <i>track</i> command.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example:</i><br></br>
+\audio(mix=music.wav) The audio file is mixed with \audio(fadeout=500)
+this sentence and then faded. </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+      <td rowspan="3" valign="top"> <br></br>
+Command <b>recstart/recstop</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(recstart=&lt;track name&gt;) <br></br>
+\audio(recstop) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+     <i>Description:</i><br></br>
+These commands allow speech to be recorded and then used in another part
+of the text. </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Example:</i><br></br>
+\audio(recstart=MyTrack1) Try this example using the recording
+capability. \audio(recstop;resume) 1234567890.<br></br>
+     <br></br>
+      <i>Result:</i><br></br>
+The phrase and the numbers will be pronounced together. </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+<br></br>
+<table border="1" cellpadding="0" cellspacing="0" width="612">
+  <tbody>
+    <tr>
+     <td rowspan="3" valign="top"> <br></br>
+Command <b>close</b> </td>
+      <td valign="top"> <br></br>
+      <i>Syntax:</i><br></br>
+\audio(close) </td>
+    </tr>
+    <tr>
+      <td valign="top"> <br></br>
+      <i>Description:</i><br></br>
+This command closes the mixer. All tracks are stopped and
+the memory freed. Further \audio or \audio(...) tags will reinitialize the
+audio mixer. </td>
+    </tr>
+    <tr>
+     <td> <br></br>
+      <i>Example:</i><br></br>
+\audio(mix=music.wav) The audio file is mixed with this sentence.
+\audio(close) Mixer flushed.<br></br>
+\audio Now the audio mixer is initialized. </td>
+    </tr>
+  </tbody>
+</table>
+</table>
+</ice:panelGrid>
+</div>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<web-app xmlns="http://geronimo.apache.org/xml/ns/j2ee/web-2.0"
+	xmlns:name="http://geronimo.apache.org/xml/ns/naming-1.2" xmlns:sec="http://geronimo.apache.org/xml/ns/security-2.0"
+	xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2"
+	xmlns:naming="http://geronimo.apache.org/xml/ns/naming">
+	<dep:environment>
+		<dep:moduleId>
+			<dep:groupId>default</dep:groupId>
+			<dep:artifactId>TTSEditor</dep:artifactId>
+			<dep:version>1.0</dep:version>
+			<dep:type>car</dep:type>
+		</dep:moduleId>
+		<dep:dependencies>
+			<dep:dependency>
+				<dep:groupId>org.apache.geronimo.framework</dep:groupId>
+				<dep:artifactId>j2ee-security</dep:artifactId>
+				<dep:type>car</dep:type>
+			</dep:dependency>
+			<dep:dependency>
+				<dep:groupId>console.realm</dep:groupId>
+				<dep:artifactId>TTSEditor</dep:artifactId>
+				<dep:version>1.0</dep:version>
+				<dep:type>car</dep:type>
+			</dep:dependency>
+		</dep:dependencies>
+	</dep:environment>
+
+	<context-root>/TTSEditor</context-root>
+	<security-realm-name>TTSEditor</security-realm-name>
+	<security>
+		<default-principal>
+			<principal name="anonymous"
+				class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" />
+		</default-principal>
+		<role-mappings>
+			<role role-name="authorised">
+				<principal name="group" designated-run-as="true"
+					class="org.apache.geronimo.security.realm.providers.GeronimoGroupPrincipal" />
+				<principal name="user"
+					class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" />
+			</role>
+		</role-mappings>
+	</security>
+</web-app>
+

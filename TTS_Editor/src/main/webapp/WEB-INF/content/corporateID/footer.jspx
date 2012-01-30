@@ -1,0 +1,18 @@
+<tr 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    >
+	
+	<td valign="top" width="160" nowrap="nowrap"></td>
+	<td align="center" width="600">
+		<span class="text">
+			&#169; 2009-2011 &#183; #{projectSettings.settings['company.name']}&#183; 
+			<a href="#{projectSettings.settings['mailto.address']}">
+				<img src="img/EmailSymbol.jpg" width="34" height="28" border="0" alt="E-Mail"></img> 
+				E-Mail senden
+			</a>
+		</span>
+	</td>
+</tr>

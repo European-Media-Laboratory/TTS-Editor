@@ -1,0 +1,17 @@
+/* tabSpacer */
+.iceTabSetTabSpacerBottom{
+    width: 100%;
+    border-top:1px solid #ABABAB;
+}
+
+/* tabPanel */
+.iceTabSetBottom{
+    padding-top:10px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-bottom:10px;
+    border-right:1px solid #ABABAB;
+    border-top:1px solid #ABABAB;
+    border-left:1px solid #ABABAB;
+    background-color:#FFFFFF;
+}

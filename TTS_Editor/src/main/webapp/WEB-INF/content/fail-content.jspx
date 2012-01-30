@@ -1,0 +1,18 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+    
+	<ice:outputText
+		value="Das hat nicht funktioniert!"
+		>
+	</ice:outputText>
+	<ice:commandButton
+		value="Zurueck!"
+		type="submit"
+		id="backToLogin"
+		actionListener="#{sessionManagement.returnToLogin}"
+		>
+	</ice:commandButton>
+</div>

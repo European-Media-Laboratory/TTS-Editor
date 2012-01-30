@@ -1,0 +1,231 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:eml="http://eml.development.de/eml"
+    >
+ 
+ 	<ice:dataTable
+		id="constraints"
+		rows="10"
+		value="#{subtitlingManager.constraintList}"
+		var="row"
+		binding="#{subtitlingManager.constraintTable}"
+		>
+		<ice:column 
+			id="sentence" 
+			>
+			<f:facet name="header">
+				<ice:outputText 
+					value="#{userSettings.settings['constraints.sentence']}"
+				/>
+			</f:facet>
+			<ice:panelGroup
+				menuPopup="menuPopupEffects"
+				>
+			<ice:panelGroup>
+				<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.value}"
+					size="65"
+					maxlength="120"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.value}"
+					size="65"
+					maxlength="120"
+					rendered="#{!row.transcription}"
+				/>			
+			</ice:panelGroup>
+			<ice:menuPopup id="menuPopupEffects">
+			<ice:menuItem
+				id="splitPause"
+				value="#{userSettings.settings['pauseInsertion.split']}"
+				actionListener="#{dataManager.splitPause}"
+				>		
+			</ice:menuItem>
+			<ice:menuItem
+				id="changeType"
+				value="#{userSettings.settings['constraints.changeType']}"
+				actionListener="#{dataManager.changeType}"
+				>
+			</ice:menuItem>
+		</ice:menuPopup>
+			</ice:panelGroup>
+		</ice:column>
+				
+		<ice:column 
+			id="start"
+			>
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.start']}"/>
+			</f:facet>
+			<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.start}"
+					size="10"
+					maxlength="14"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.start}"
+					size="10"
+					maxlength="14"
+					rendered="#{!row.transcription}"
+				/>			
+		</ice:column>
+		<ice:column id="end">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.end']}"/>
+			</f:facet>
+				<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.end}"
+					size="10"
+					maxlength="14"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.end}"
+					size="10"
+					maxlength="14"
+					rendered="#{!row.transcription}"
+				/>			
+		</ice:column>				
+		<ice:column id="duration">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.duration']}"/>
+			</f:facet>
+			<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.duration}"
+					size="5"
+					maxlength="7"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.duration}"
+					size="5"
+					maxlength="7"
+					rendered="#{!row.transcription}"
+				/>			
+		</ice:column>
+		<ice:column id="pause">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.pause']}"/>
+			</f:facet>
+						<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.pause}"
+					size="5"
+					maxlength="7"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.pause}"
+					size="5"
+					maxlength="7"
+					rendered="#{!row.transcription}"
+				/>			
+		</ice:column>
+		<ice:column id="durationReal">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.realDuration']}"/>
+			</f:facet>
+						<ice:inputText
+					style="background-color:#FFFFFF" 
+					value="#{row.realDuration}"
+					size="10"
+					maxlength="14"
+					rendered="#{row.transcription}"
+				/>	
+				<ice:inputText
+					style="background-color:#767676" 
+					value="#{row.realDuration}"
+					size="10"
+					maxlength="14"
+					rendered="#{!row.transcription}"
+				/>			
+		</ice:column>
+		<ice:column id="determinDuration">
+			<f:facet name="header">
+				<ice:outputText value="#{userSettings.settings['constraints.determinDuration']}"/>
+			</f:facet>
+			<ice:commandButton
+				type="submit"
+				value="#{userSettings.settings['constraints.determinDuration']}"
+				actionListener="#{subtitlingManager.determineDuration}"
+			/>			
+		</ice:column>
+		
+		</ice:dataTable> 		
+			<ice:dataPaginator 
+				id="constraintsScroll"                  
+        		for="constraints" 
+        		fastStep="3" 
+        		paginator="true" 
+        		paginatorMaxPages="4" 
+        	>
+        	<f:facet name="first">
+        		<ice:graphicImage 
+            		id="firstpage_1"
+                	url="/xmlhttp/css/xp/css-images/arrow-first.gif"                                      
+                	style="border:none;"
+                	title="1"
+                	/>
+       		</f:facet>
+   			<f:facet name="last">
+        		<ice:graphicImage 
+            		id="lastpage_1"
+                	url="/xmlhttp/css/xp/css-images/arrow-last.gif"
+                	style="border:none;"
+                	title="2"
+                	/>
+      		</f:facet>
+        	<f:facet name="previous">
+        		<ice:graphicImage 
+            		id="previouspage_1"
+                	url="/xmlhttp/css/xp/css-images/arrow-previous.gif"
+                	style="border:none;"
+                	title="3"
+                	/>
+       		</f:facet>
+        	<f:facet name="next">
+	        	<ice:graphicImage 
+    	        	id="nextpage_1"
+                	url="/xmlhttp/css/xp/css-images/arrow-next.gif"
+                	style="border:none;"
+                	title="4"/>
+       		</f:facet>
+        	<f:facet name="fastforward">
+        		<ice:graphicImage 
+	            	id="fastforward_1"
+    	            url="/xmlhttp/css/xp/css-images/arrow-ff.gif"
+                	style="border:none;"
+                	title="5"
+                	/>
+       		</f:facet>
+        	<f:facet name="fastrewind">
+        		<ice:graphicImage 
+            		id="fastrewind_1"
+                	url="/xmlhttp/css/xp/css-images/arrow-fr.gif"
+                	style="border:none;"
+                	title="6"/>
+        	</f:facet>
+		</ice:dataPaginator>
+
+		<ice:commandButton
+			type="submit"
+			value="#{userSettings.settings['constraints.onlyPauses']}"
+			rendered="#{subtitlingManager.showPlayer}"
+			visible="#{subtitlingManager.showPlayer}"
+			actionListener="#{subtitlingManager.showOnlyPauses}"
+		/>
+</div>

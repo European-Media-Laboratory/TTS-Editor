@@ -1,0 +1,29 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelPopup autoCentre="true" visible="#{popupManager.showArbitraryError}" 
+		modal="true" rendered="#{popupManager.showArbitraryError}"
+		style="z-index: 1001; top: 30%; left: 10%; position: absolute; width: 200px;">
+		   	
+		<f:facet name="header">
+        	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" style="text-align: center;">
+            	<ice:outputText style="color: #FFFFFF;" value="#{userSettings.settings['error.Ups']}"/>
+                	<ice:commandButton image="../img/cancel-small.png" action="#{popupManager.cancelPopupAction}" alt="close" title="Close"/>
+            </ice:panelGrid>
+        </f:facet>
+	    <f:facet name="body">
+           	<ice:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" style="text-align: center;">
+			<ice:outputText value="#{popupManager.arbitraryErrorValue}"/>
+			<ice:commandButton 
+				id="cancel2" 
+				action="#{popupManager.cancelPopupAction}" 
+				value="OK" 
+				>
+			</ice:commandButton>
+			</ice:panelGrid>
+		</f:facet>
+	</ice:panelPopup>
+</div>

@@ -1,0 +1,151 @@
+<div 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+
+	<ice:panelGroup>
+		 
+		 <ice:panelCollapsible expanded="true">
+		 	<f:facet name="header">
+		 		<ice:panelGroup>
+		 			<ice:outputText value="About"/>
+		 		</ice:panelGroup>
+		 	</f:facet>
+		 	<ice:panelGrid>
+		 		<h3> About the TTS Editor Workplace </h3>
+		 		Welcome to the EML Text To Speech Editor. The following help pages
+		 		should give you a hand in using the editor.
+		 	</ice:panelGrid>
+		 </ice:panelCollapsible>
+		 
+		 <ice:panelCollapsible id="bla" expanded="false" >
+		 	<f:facet name="header">
+		 		<ice:panelGroup>
+		 			<ice:outputText value="Guide"/>
+	 			</ice:panelGroup>
+ 			</f:facet>
+ 			<ice:panelGrid>
+	 			<h3> Guide </h3>
+
+				This Quick Start Guide should give you an overview of the most important
+				tuning features and help you get first results using the EML TTS Editor.
+				<hr></hr>
+				To get you started, two default projects are included in your user settings. One is
+				a regular project, where text is entered and can be tuned as required to create
+				a reasonable result. 
+				The other is a so-called "audio description" project, where information including
+				constraints is given (imported from a subtitling tool - therefore the name) 
+				and can be tuned as required. 
+				<hr></hr>
+				Start with writing the sentence you want to have synthesized. Write it down as
+				you would write it on a sheet of paper. 
+				<br></br>
+				If you are satisfied with what you hear, you can hit the "save" button and save
+				the synthesized text.
+				<br></br>
+				If you are NOT satisfied with what you hear, you have the following options to
+				improve the quality:
+				<ul>
+					<li>Change single letters within the word</li>
+					<li>Change the whole word to resemble what it would sound like(sounds-like).
+						This is especially useful when the word is not native to the language.</li>
+					<li>With very long words (common in German) try to split the words into their
+						components.</li>
+					<li>Often occurring problems (words, abbreviations, etc.) can be put to
+						a user's lexicon. </li>
+					<li>Use commas for forcing pauses within the speech. Might also change
+						the pronunciation to a more favorable pronunciation</li>
+					<li>You can set stress information, in case you are unhappy with the
+						automatically stress setting.</li>
+				</ul>
+				Another set of possibilities is to force certain pronunciations by using
+				phonetic transcription. This can be done by using the menu option 
+				"Tuning/Phonetic Transcription" which opens a new tab, which contains 
+				the automatically created transcriptions. These can be edited in the table
+				presented to you. Entries that occur often and which you do not want to change
+				every time they occur can be moved to a user lexicon. In this lexicon the
+				pronunciation can also be created as a so-called "soundslike", which means that you 
+				"describe" what it would sound like. A detailed description of the lexicon follows below.
+				<hr></hr>
+				Additionally, you have the possibility to add a soundfile as background to your
+				synthesized speech. You can do that via the "Effects" menu item.
+			</ice:panelGrid>
+	 	</ice:panelCollapsible>
+	 	
+		 <ice:panelCollapsible expanded="true">
+		 	<f:facet name="header">
+		 		<ice:panelGroup>
+		 			<ice:outputText value="Audio Descriptions"/>
+		 		</ice:panelGroup>
+		 	</f:facet>
+		 	<ice:panelGrid>
+		 		<h3> Audio Descriptions</h3>
+				Apart from creating "simple" spoken documents the TTS Editor also allows for
+				creating Audio Descriptions for movies. There are two possible ways to do this:
+				<hr></hr>
+				First, you can upload a movie, which will then be analysed to give a rough
+				overview where pauses occur in the movie, which can then be filled with
+				descriptions.
+				<br></br>
+				Second, you can import a text-file from a so-called subtitling tool,
+				which already contains descriptions and what we call "constraints" (timing information).
+				You can then upload the respective movie afterwards or not at all.
+				<br></br>
+				Once you are finished, you can download either the constraints for
+				further usage, or the synthesized document (.mp3-format) or if you uploaded
+				a movie you can download all sound (sound from the movie and the synthesis)
+				for further usage.
+				<br></br>
+				In general, the audio description environment offers the same tuning possibilities as
+				the regular environment does. During synthesis the so-called constraints
+				(which are shown in the respective tab) are taken into account. There it is
+				also possible to check whether the description actually fits the time
+				constraint given. 
+				<br></br>
+				Additionally, it is possible to watch the movie while creating the descriptions
+				and also to create a preview of the movie, where the synthesis layer is
+				added to the movie.
+		 	</ice:panelGrid>
+		 </ice:panelCollapsible>
+	 	
+<!--	 	<ice:panelCollapsible>-->
+<!--	 		<f:facet name="header">-->
+<!--	 			<ice:panelGroup>-->
+<!--	 				<ice:outputText value="General"/>-->
+<!--	 			</ice:panelGroup>-->
+<!--	 		</f:facet>-->
+<!--			<ice:panelGrid>-->
+<!--				<h3> Some general information about how to use the TTS Editor</h3>-->
+<!--				All regular shortcuts available through your right mouse click are available.-->
+<!--				<br></br>-->
+<!--				The TTS Editor offers an AudioEdit functionality, which as of now relies on -->
+<!--				Audacity, which must be installed on your machine. This AudioEdit functionality-->
+<!--				allows for manipulating the wave form produced by the synthesis and also allows -->
+<!--				for saving the resulting file. <br></br>-->
+<!--				Please note, that the tuning via the editor is unaffected by the waveform tuning.-->
+<!--				Therefore, this should be the last step in the tuning process! If you save the-->
+<!--				data in the editor, it will not reflect changes done via the AudioEdit -->
+<!--				functionality.-->
+<!--			</ice:panelGrid>-->
+<!---->
+<!---->
+<!--	 	</ice:panelCollapsible>-->
+<!--	 	-->
+	 	
+<!--	 	<ice:panelCollapsible>-->
+<!--	 		<f:facet name="header">-->
+<!--	 			<ice:panelGroup>-->
+<!--	 				<ice:outputText value="Controls"/>-->
+<!--	 			</ice:panelGroup>-->
+<!--	 		</f:facet>-->
+<!--	 		<ice:panelGrid>-->
+<!--		 		<ui:include src="helpDocs/Controls.jspx"/>-->
+<!--				<ice:outputText value="#{helpDocs/Controls.jspx}"/>-->
+<!--				<ice:outputText value="#{userSettings.settings['help.Controls']}"/>-->
+<!--	 		</ice:panelGrid>-->
+<!--	 	</ice:panelCollapsible>-->
+	 	
+ 	</ice:panelGroup>
+
+</div>

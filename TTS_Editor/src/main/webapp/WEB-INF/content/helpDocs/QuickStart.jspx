@@ -1,0 +1,57 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:ice="http://www.icesoft.com/icefaces/component">
+     	
+    <ice:panelGrid visible="#{helpManager.showQuickStart}" rendered="#{helpManager.showQuickStart}">
+<h3> Quick Start Guide </h3>
+
+This Quick Start Guide should give you an overview of the most important
+tuning features and help you get first results using the EML TTS Editor.
+
+<hr></hr>
+
+Start with writing the sentence you want to have synthesized. Write it down as
+you would write it on a sheet of paper. Select a voice (e.g. Katrin) and listen
+to it.
+<br></br>
+If you are satisfied with what you hear, you can hit the "save" button and save
+the synthesized text.
+<br></br>
+If you are NOT satisfied with what you hear, you have the following options to
+improve the quality:
+
+<ul>
+	<li>Change single letters within the word</li>
+	<li>Change the whole word to resemble what it would sound like(sounds-like).
+		This is especially useful when the word is not native to the language.</li>
+	<li>With very long words (common in German) try to split the words into their
+		components.</li>
+	<li>Often occurring problems (words, abbreviations, etc.) can be put to
+		a user's lexicon. </li>
+	<li>Use commas for forcing pauses within the speech. Might also change
+		the pronunciation to a more favorable pronunciation</li>
+</ul>
+
+Another set of possibilities is to force certain pronunciations by using
+phonetic transcription:
+
+<ul>
+	<li>Change the word from its literal writing to SAMPA transcription.</li>
+	<li>Try to change single phonemes within the transcription.</li>
+	<li>\SAMPA=phonetic transcription</li>
+	<li>The list of phonemes for German can be found in the "Phoneme Inventory" tab</li>
+</ul>
+
+And finally you can use various control tags offered by the TTS Engine:
+
+<ul>
+	<li>\pause=NUM - inserts a pause of specified length</li>
+	<li>\speed=NUM - changes the speaking speed in a range of 0 to 100, where 50 is the default value</li>
+	<li>\volume=NUM - changes the volume of the spoken text</li>
+	<li>\spell=yes/no - if "yes" the next "word" is spelled letter by letter</li>
+	<li>\number=cardinal/code - if "cardinal" the number is pronounced as number 
+		and if "code" each number is pronounced individually.</li>
+</ul>
+</ice:panelGrid>
+</div>

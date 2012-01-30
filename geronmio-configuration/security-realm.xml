@@ -1,0 +1,34 @@
+<module xmlns="http://geronimo.apache.org/xml/ns/deployment-1.2">
+    <environment>
+        <moduleId>
+            <groupId>console.realm</groupId>
+            <artifactId>TTSEditor</artifactId>
+            <version>1.0</version>
+            <type>car</type>
+        </moduleId>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.geronimo.framework</groupId>
+                <artifactId>j2ee-security</artifactId>
+                <type>car</type>
+            </dependency>
+        </dependencies>
+    </environment>
+    <gbean name="TTSEditor" class="org.apache.geronimo.security.realm.GenericSecurityRealm" xsi:type="dep:gbeanType" xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <attribute name="realmName">TTSEditor</attribute>
+        <attribute name="global">false</attribute>
+        <reference name="ServerInfo">
+            <name>ServerInfo</name>
+        </reference>
+        <xml-reference name="LoginModuleConfiguration">
+            <log:login-config xmlns:log="http://geronimo.apache.org/xml/ns/loginconfig-2.0">
+                <log:login-module control-flag="REQUIRED" wrap-principals="false">
+                    <log:login-domain-name>TTSEditor</log:login-domain-name>
+                    <log:login-module-class>org.apache.geronimo.security.realm.providers.PropertiesFileLoginModule</log:login-module-class>
+                    <log:option name="usersURI">var/security/ttsEditorUsers.realm</log:option>
+                    <log:option name="groupsURI">var/security/ttsEditorGroups.realm</log:option>
+                </log:login-module>
+            </log:login-config>
+        </xml-reference>
+    </gbean>
+</module>
