@@ -51,6 +51,23 @@ you will have to implement the synthesizer interface in the API.
 The same is true for the recognizer and the g2p method, in case you
 want to use those.
 
+* Reference 
+
+For Reference and citation in for example publications or talks please use
+the following two papres:
+
+Juan Martinez, Margot Mieskes 
+A web-based editor for audio-titling using synthetic speech 
+Symposium on Live Subtitling – Exploring new avenues and new contexts: 
+Subtitling and other respeaking applications for media accessibility, 
+Antwerpen, Belgium, 21st October 2011.
+
+Margot Mieskes 
+An Engine-Independent Text-to-Speech Workplace
+12th Annual Conference of the International Speech Communication Association 
+Interspeech 2011, 
+Florence, Italy, 28 - 31 August 2011.
+
 * License
 
 The project is licensed under the Eclipse Public License (EPL) a copy
